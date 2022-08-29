@@ -20,40 +20,40 @@ public class UserDao {
     }
 
     public List<GetUserRes> getUsers(){
-        String getUsersQuery = "select * from UserInfo";
+        String getUsersQuery = "select * from User";
         return this.jdbcTemplate.query(getUsersQuery,
                 (rs,rowNum) -> new GetUserRes(
-                        rs.getInt("userIdx"),
+                        rs.getInt("userId"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPassword"),
                         rs.getString("userName"),
-                        rs.getString("ID"),
-                        rs.getString("Email"),
-                        rs.getString("password"))
+                        rs.getString("userPhoneNum"))
                 );
     }
 
-    public List<GetUserRes> getUsersByEmail(String email){
-        String getUsersByEmailQuery = "select * from UserInfo where email =?";
-        String getUsersByEmailParams = email;
+    public List<GetUserRes> getUsersByEmail(String userEmail){
+        String getUsersByEmailQuery = "select * from User where userEmail =?";
+        String getUsersByEmailParams = userEmail;
         return this.jdbcTemplate.query(getUsersByEmailQuery,
                 (rs, rowNum) -> new GetUserRes(
-                        rs.getInt("userIdx"),
+                        rs.getInt("userId"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPassword"),
                         rs.getString("userName"),
-                        rs.getString("ID"),
-                        rs.getString("Email"),
-                        rs.getString("password")),
+                        rs.getString("userPhoneNum")),
                 getUsersByEmailParams);
     }
 
-    public GetUserRes getUser(int userIdx){
-        String getUserQuery = "select * from UserInfo where userIdx = ?";
-        int getUserParams = userIdx;
+    public GetUserRes getUser(int userId){
+        String getUserQuery = "select * from User where userId = ?";
+        int getUserParams = userId;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
-                        rs.getInt("userIdx"),
+                        rs.getInt("userId"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPassword"),
                         rs.getString("userName"),
-                        rs.getString("ID"),
-                        rs.getString("Email"),
-                        rs.getString("password")),
+                        rs.getString("userPhoneNum")),
                 getUserParams);
     }
     

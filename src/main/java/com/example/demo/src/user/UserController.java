@@ -28,8 +28,6 @@ public class UserController {
     private final JwtService jwtService;
 
 
-
-
     public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
         this.userProvider = userProvider;
         this.userService = userService;
@@ -46,14 +44,14 @@ public class UserController {
     //Query String
     @ResponseBody
     @GetMapping("") // (GET) 127.0.0.1:9000/app/users
-    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String Email) {
+    public BaseResponse<List<GetUserRes>> getUsers(@RequestParam(required = false) String userEmail) {
         try{
-            if(Email == null){
+            if(userEmail == null){
                 List<GetUserRes> getUsersRes = userProvider.getUsers();
                 return new BaseResponse<>(getUsersRes);
             }
             // Get Users
-            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(Email);
+            List<GetUserRes> getUsersRes = userProvider.getUsersByEmail(userEmail);
             return new BaseResponse<>(getUsersRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -67,11 +65,11 @@ public class UserController {
      */
     // Path-variable
     @ResponseBody
-    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
+    @GetMapping("/{userId}") // (GET) 127.0.0.1:9000/app/users/:userId
+    public BaseResponse<GetUserRes> getUser(@PathVariable("userId") int userId) {
         // Get Users
         try{
-            GetUserRes getUserRes = userProvider.getUser(userIdx);
+            GetUserRes getUserRes = userProvider.getUser(userId);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -88,11 +86,11 @@ public class UserController {
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
+        // 이메일이 null 값인 경우
         if(postUserReq.getEmail() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
-        //이메일 정규표현
+        // 이메일 정규 표현
         if(!isRegexEmail(postUserReq.getEmail())){
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
@@ -103,6 +101,7 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      * 로그인 API
      * [POST] /users/logIn
