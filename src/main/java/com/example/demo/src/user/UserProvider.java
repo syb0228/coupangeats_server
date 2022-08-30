@@ -70,18 +70,31 @@ public class UserProvider {
     }
 
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException{
+        // 이메일 유효성 검사
+        if(userDao.checkEmail(postLoginReq.getUserEmail()) == 0){ // 존재하지 않은 이메일
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
         User user = userDao.getPwd(postLoginReq);
+        // 유효성 검사
+        if(user.getStatus().equals("inactive")){ // 비활성화된 유저
+            throw new BaseException(INACTIVE_USER);
+        }
+        if(user.getStatus().equals("deleted")){ // 탈퇴한 유저
+            throw new BaseException(DELETED_USER);
+        }
+
         String encryptPwd;
         try {
-            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
+            encryptPwd=new SHA256().encrypt(postLoginReq.getUserPassword());
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if(user.getPassword().equals(encryptPwd)){
-            int userIdx = user.getUserIdx();
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostLoginRes(userIdx,jwt);
+        if(user.getUserPassword().equals(encryptPwd)){
+            int userId = user.getUserId();
+            String jwt = jwtService.createJwt(userId);
+            return new PostLoginRes(userId,jwt);
         }
         else{
             throw new BaseException(FAILED_TO_LOGIN);

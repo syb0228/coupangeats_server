@@ -28,13 +28,17 @@ public enum BaseResponseStatus {
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력하세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일을 올바르게 입력해주세요."),
-    POST_USERS_EXISTS_EMAIL(false,2017,"이미 가입된 이메일 주소입니다. 다른 이메일을 입력하여 주세요."),
-    POST_USERS_EMPTY_PASSWORD(false, 2018, "비밀번호를 입력하세요."),
-    POST_USERS_INVALID_PASSWORD_1(false, 2019, "X 영문/숫자/특수문자 2가지 이상 조합 (8~20자)"),
-    POST_USERS_INVALID_PASSWORD_2(false, 2020, "X 3개 이상 연속되거나 동일한 문자/숫자 제외"),
-    POST_USERS_INVALID_PASSWORD_3(false, 2021, "X 아이디(이메일) 제외"),
-    POST_USERS_EMPTY_NAME(false, 2022, "이름을 정확히 입력하세요."),
-    POST_USERS_EMPTY_PHONENUM(false, 2023, "휴대폰 번호를 정확하게 입력하세요."),
+    POST_USERS_EMPTY_PASSWORD(false, 2017, "비밀번호를 입력하세요."),
+    POST_USERS_INVALID_PASSWORD_1(false, 2018, "X 영문/숫자/특수문자 2가지 이상 조합 (8~20자)"),
+    POST_USERS_INVALID_PASSWORD_2(false, 2019, "X 3개 이상 연속되거나 동일한 문자/숫자 제외"),
+    POST_USERS_INVALID_PASSWORD_3(false, 2020, "X 아이디(이메일) 제외"),
+    POST_USERS_EMPTY_NAME(false, 2021, "이름을 정확히 입력하세요."),
+    POST_USERS_EMPTY_PHONENUM(false, 2022, "휴대폰 번호를 정확하게 입력하세요."),
+
+    // [POST] /users/logIn
+    POST_LOGIN_EMPTY_EMAIL(false, 2023, "아이디를 입력해주세요."),
+    POST_LOGIN_INVALID_EMAIL(false, 2024, "아이디는 이메일주소 형식으로 입력해주세요."),
+    POST_LOGIN_EMPTY_PASSWORD(false, 2025, "비밀번호를 입력해주세요."),
 
 
 
@@ -45,8 +49,12 @@ public enum BaseResponseStatus {
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),
 
     // [POST] /users
-    DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
-    FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    POST_USERS_EXISTS_EMAIL(false, 3013, "이미 가입된 이메일 주소입니다. 다른 이메일을 입력하여 주세요."),
+
+    // [POST] /users/logIn
+    FAILED_TO_LOGIN(false,3014,"입력하신 아이디 또는 비밀번호가 일치하지 않습니다."),
+    INACTIVE_USER(false, 3015, "비활성화된 유저입니다."),
+    DELETED_USER(false, 3016, "탈퇴한 유저입니다."),
 
 
 
