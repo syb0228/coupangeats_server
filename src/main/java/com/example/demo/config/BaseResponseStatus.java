@@ -41,7 +41,6 @@ public enum BaseResponseStatus {
     POST_LOGIN_EMPTY_PASSWORD(false, 2025, "비밀번호를 입력해주세요."),
 
 
-
     /**
      * 3000 : Response 오류
      */

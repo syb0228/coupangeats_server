@@ -21,7 +21,7 @@ public class JwtService {
 
     /*
     JWT 생성
-    @param userIdx
+    @param userId
     @return String
      */
     public String createJwt(int userId){
@@ -45,11 +45,11 @@ public class JwtService {
     }
 
     /*
-    JWT에서 userIdx 추출
+    JWT에서 userId 추출
     @return int
     @throws BaseException
      */
-    public int getUserIdx() throws BaseException{
+    public int getUserId() throws BaseException{
         //1. JWT 추출
         String accessToken = getJwt();
         if(accessToken == null || accessToken.length() == 0){
@@ -66,7 +66,7 @@ public class JwtService {
             throw new BaseException(INVALID_JWT);
         }
 
-        // 3. userIdx 추출
+        // 3. userId 추출
         return claims.getBody().get("userId",Integer.class);
     }
 

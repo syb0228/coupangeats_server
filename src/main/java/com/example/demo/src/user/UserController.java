@@ -160,21 +160,26 @@ public class UserController {
 
     /**
      * 유저정보변경 API
-     * [PATCH] /users/:userIdx
+     * [PATCH] /users/:userId
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/{userIdx}")
-    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
+    @PatchMapping("/{userId}")
+    public BaseResponse<String> modifyUserName(@PathVariable("userId") int userId, @RequestBody User user){
         try {
-            //jwt에서 idx 추출.
-            int userIdxByJwt = jwtService.getUserIdx();
-            //userIdx와 접근한 유저가 같은지 확인
-            if(userIdx != userIdxByJwt){
+            // 이름 유효성 검사
+            if(user.getUserName() == null){ // null 값
+                return new BaseResponse<>(POST_USERS_EMPTY_NAME);
+            }
+
+            // jwt에서 id 추출.
+            int userIdByJwt = jwtService.getUserId();
+            // userIdx와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            //같다면 유저네임 변경
-            PatchUserReq patchUserReq = new PatchUserReq(userIdx,user.getUserName());
+            // 같다면 유저네임 변경
+            PatchUserReq patchUserReq = new PatchUserReq(userId,user.getUserName());
             userService.modifyUserName(patchUserReq);
 
             String result = "";
