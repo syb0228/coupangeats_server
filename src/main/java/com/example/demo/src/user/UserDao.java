@@ -59,21 +59,20 @@ public class UserDao {
     
 
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into UserInfo (userName, ID, password, email) VALUES (?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getId(), postUserReq.getPassword(), postUserReq.getEmail()};
+        String createUserQuery = "insert into User (userEmail, userPassword, userName, userPhoneNum) VALUES (?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getUserEmail(), postUserReq.getUserPassword(), postUserReq.getUserName(), postUserReq.getUserPhoneNum()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
-        String lastInserIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select email from UserInfo where email = ?)";
-        String checkEmailParams = email;
+    public int checkEmail(String userEmail){
+        String checkEmailQuery = "select exists(select userEmail from User where userEmail = ?)";
+        String checkEmailParams = userEmail;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
                 checkEmailParams);
-
     }
 
     public int modifyUserName(PatchUserReq patchUserReq){

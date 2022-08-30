@@ -13,7 +13,7 @@ import java.util.List;
 
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
+import static com.example.demo.utils.ValidationRegex.*;
 
 @RestController
 @RequestMapping("/app/users")
@@ -86,14 +86,41 @@ public class UserController {
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        // 이메일이 null 값인 경우
-        if(postUserReq.getEmail() == null){
+        // 이메일 유효성 검사
+        if(postUserReq.getUserEmail() == null) { // null 값이 입력된 경우
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
-        // 이메일 정규 표현
-        if(!isRegexEmail(postUserReq.getEmail())){
+        if(!isRegexEmail(postUserReq.getUserEmail())){ // 이메일 정규 표현
             return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
         }
+
+        // 비밀번호 유효성 검사
+        if(postUserReq.getUserPassword() == null) { // null 값이 입력된 경우
+            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+        }
+        if(!isRegexPassword(postUserReq.getUserPassword())){ // 비밀번호 정규 표현
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD_1);
+        }
+//        if(!isRegexPassword2(postUserReq.getUserPassword())){
+//            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD_2);
+//        }
+        if(postUserReq.getUserPassword().contains(postUserReq.getUserEmail())){ // 아이디(이메일) 제외
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD_3);
+        }
+
+        // 이름 유효성 검사
+        if(postUserReq.getUserName() == null || postUserReq.getUserName().length() < 2){ // null 값이 입력된 경우, 길이가 2 미만인 경우
+            return new BaseResponse<>(POST_USERS_EMPTY_NAME);
+        }
+
+        // 휴대폰번호 유효성 검사
+        if(postUserReq.getUserPhoneNum() == null){ // null 값이 입력된 경우
+            return new BaseResponse<>(POST_USERS_EMPTY_PHONENUM);
+        }
+        if(!isRegexPhoneNum(postUserReq.getUserPhoneNum())){ // 휴대폰번호 정규 표현
+            return new BaseResponse<>(POST_USERS_EMPTY_PHONENUM);
+        }
+
         try{
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
