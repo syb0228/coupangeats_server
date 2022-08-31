@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetEventRes {
+public class GetEventsRes {
     private int eventId;
-    private String eventTitle;
     private String eventImgUrl;
-    private String eventContent;
+    private String expiredAt;
 }

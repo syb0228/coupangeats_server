@@ -13,4 +13,6 @@ public class PostEventReq {
     private String eventTitle;
     private String eventContent;
     private Timestamp expiredAt;
+    private String RepEventImgUrl;
+    private String noRepEventImgUrl;
 }

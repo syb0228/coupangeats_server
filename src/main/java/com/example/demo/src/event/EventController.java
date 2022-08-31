@@ -2,10 +2,7 @@ package com.example.demo.src.event;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.event.model.GetEventRes;
-import com.example.demo.src.event.model.PatchEventReq;
-import com.example.demo.src.event.model.PostEventReq;
-import com.example.demo.src.event.model.PostEventRes;
+import com.example.demo.src.event.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +26,9 @@ public class EventController {
     @Autowired
     private final EventService eventService;
 
-    @Autowired
-    private final JwtService jwtService;
-
-    public EventController(EventProvider eventProvider, EventService eventService, JwtService jwtService){
+    public EventController(EventProvider eventProvider, EventService eventService){
         this.eventProvider = eventProvider;
         this.eventService = eventService;
-        this.jwtService = jwtService;
     }
 
     /**
@@ -48,11 +41,11 @@ public class EventController {
     //Query String
     @ResponseBody
     @GetMapping("") // (GET) 127.0.0.1:9000/app/events
-    public BaseResponse<List<GetEventRes>> getEvents(){
+    public BaseResponse<List<GetEventsRes>> getEvents(){
         try{
             // Get Events
-            List<GetEventRes> getEventRes = eventProvider.getEvents();
-            return new BaseResponse<>(getEventRes);
+            List<GetEventsRes> getEventsRes = eventProvider.getEvents();
+            return new BaseResponse<>(getEventsRes);
         } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -98,6 +91,14 @@ public class EventController {
             if(expiredAt.before(ts)){ // 만료일이 현재 날짜보다 빠른 경우
                 return new BaseResponse<>(POST_EVENT_INVALID_EXPIREDAT);
             }
+        }
+
+        // 이벤트 이미지 유효성 검사
+        if(postEventReq.getRepEventImgUrl() == null){
+            return new BaseResponse<>(POST_EVENT_EMPTY_REPIMG);
+        }
+        if(postEventReq.getNoRepEventImgUrl() == null){
+            return new BaseResponse<>(POST_EVENT_EMPTY_NOREPIMG);
         }
 
         try{

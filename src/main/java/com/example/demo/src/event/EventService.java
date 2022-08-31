@@ -19,20 +19,19 @@ public class EventService {
 
     private final EventDao eventDao;
     private final EventProvider eventProvider;
-    private final JwtService jwtService;
 
     @Autowired
-    public EventService(EventDao eventDao, EventProvider eventProvider, JwtService jwtService){
+    public EventService(EventDao eventDao, EventProvider eventProvider){
         this.eventDao = eventDao;
         this.eventProvider = eventProvider;
-        this.jwtService = jwtService;
     }
 
     //POST
     public PostEventRes createEvent(PostEventReq postEventReq) throws BaseException {
         try{
             int eventId = eventDao.createEvent(postEventReq);
-            return new PostEventRes(eventId);
+            int eventImgId = eventDao.createEventImg(eventId, postEventReq);
+            return new PostEventRes(eventId, eventImgId);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

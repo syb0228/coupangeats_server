@@ -9,4 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostEventRes {
     private int eventId;
+    private int eventImgId;
 }

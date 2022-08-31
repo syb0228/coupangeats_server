@@ -43,9 +43,11 @@ public enum BaseResponseStatus {
     // [POST] /events
     POST_EVENT_EMPTY_TITLE(false, 2026, "이벤트 제목을 입력하세요."),
     POST_EVENT_INVALID_EXPIREDAT(false, 2027, "만료일이 현재 시간보다 빠릅니다."),
+    POST_EVENT_EMPTY_REPIMG(false, 2028, "이벤트 대표 사진을 첨부하세요."),
+    POST_EVENT_EMPTY_NOREPIMG(false, 2029, "이벤트 본문 사진을 첨부하세요."),
 
     // [POST] /events/{eventId}
-    POST_EVENT_EMPTY_EVENTINFO(false, 2028, "이벤트 제목이나 내용을 입력하세요."),
+    POST_EVENT_EMPTY_EVENTINFO(false, 2030, "이벤트 제목이나 내용을 입력하세요."),
 
     /**
      * 3000 : Response 오류

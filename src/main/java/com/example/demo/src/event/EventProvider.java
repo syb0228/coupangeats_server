@@ -3,6 +3,7 @@ package com.example.demo.src.event;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.event.model.GetEventRes;
+import com.example.demo.src.event.model.GetEventsRes;
 import com.example.demo.src.event.model.PostEventReq;
 import com.example.demo.src.event.model.PostEventRes;
 import com.example.demo.utils.JwtService;
@@ -19,20 +20,18 @@ import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 public class EventProvider {
 
     private final EventDao eventDao;
-    private final JwtService jwtService;
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public EventProvider(EventDao eventDao, JwtService jwtService){
+    public EventProvider(EventDao eventDao){
         this.eventDao = eventDao;
-        this.jwtService = jwtService;
     }
 
-    public List<GetEventRes> getEvents() throws BaseException{
+    public List<GetEventsRes> getEvents() throws BaseException{
         try{
-            List<GetEventRes> getEventRes = eventDao.getEvents();
-            return getEventRes;
+            List<GetEventsRes> getEventsRes = eventDao.getEvents();
+            return getEventsRes;
         }
         catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
