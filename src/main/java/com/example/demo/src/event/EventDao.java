@@ -1,6 +1,7 @@
 package com.example.demo.src.event;
 
 import com.example.demo.src.event.model.GetEventRes;
+import com.example.demo.src.event.model.PatchEventReq;
 import com.example.demo.src.event.model.PostEventReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,5 +53,18 @@ public class EventDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    public int modifyEventTitle(PatchEventReq patchEventReq){
+        String modifyEventTitleQuery = "update Event set eventTitle = ? where eventId = ?";
+        Object[] modifyEventTitleParams = new Object[]{patchEventReq.getEventTitle(), patchEventReq.getEventId()};
+
+        return this.jdbcTemplate.update(modifyEventTitleQuery, modifyEventTitleParams);
+    }
+
+    public int modifyEventContent(PatchEventReq patchEventReq){
+        String modifyEventContentQuery = "update Event set eventContent = ? where eventId = ?";
+        Object[] modifyEventContentParams = new Object[]{patchEventReq.getEventContent(), patchEventReq.getEventId()};
+
+        return this.jdbcTemplate.update(modifyEventContentQuery, modifyEventContentParams);
+    }
 
 }

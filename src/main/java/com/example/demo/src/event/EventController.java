@@ -3,6 +3,7 @@ package com.example.demo.src.event;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.event.model.GetEventRes;
+import com.example.demo.src.event.model.PatchEventReq;
 import com.example.demo.src.event.model.PostEventReq;
 import com.example.demo.src.event.model.PostEventRes;
 import com.example.demo.utils.JwtService;
@@ -15,8 +16,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.POST_EVENT_EMPTY_TITLE;
-import static com.example.demo.config.BaseResponseStatus.POST_EVENT_INVALID_EXPIREDAT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("/app/events")
@@ -77,7 +77,7 @@ public class EventController {
     }
 
     /**
-     * 이벤트 등록 API
+     * 이벤트 생성 API
      * [POST] /events
      * @return BaseResponse<PostEventRes>
      */
@@ -103,6 +103,36 @@ public class EventController {
         try{
             PostEventRes postEventRes = eventService.createEvent(postEventReq);
             return new BaseResponse<>(postEventRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 이벤트 정보 변경 API
+     * [PATCH] /events/:eventId
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/{eventId}")
+    public BaseResponse<String> modifyEventInfo(@PathVariable("eventId") int eventId, @RequestBody Event event){
+        try {
+            PatchEventReq patchEventReq = new PatchEventReq(eventId, event.getEventTitle(), event.getEventContent());
+            // 이벤트 정보 유효성 검사
+            if (patchEventReq.getEventTitle() == null && patchEventReq.getEventContent() == null){
+                return new BaseResponse<>(POST_EVENT_EMPTY_EVENTINFO);
+            }
+            // 이벤트 제목 변경
+            if(patchEventReq.getEventTitle() != null){
+                eventService.modifyEventTitle(patchEventReq);
+            }
+            // 이벤트 내용 변경
+            if(patchEventReq.getEventContent() != null){
+                eventService.modifyEventContent(patchEventReq);
+            }
+
+            String result = "";
+            return new BaseResponse<>(result);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }

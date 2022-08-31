@@ -44,6 +44,8 @@ public enum BaseResponseStatus {
     POST_EVENT_EMPTY_TITLE(false, 2026, "이벤트 제목을 입력하세요."),
     POST_EVENT_INVALID_EXPIREDAT(false, 2027, "만료일이 현재 시간보다 빠릅니다."),
 
+    // [POST] /events/{eventId}
+    POST_EVENT_EMPTY_EVENTINFO(false, 2028, "이벤트 제목이나 내용을 입력하세요."),
 
     /**
      * 3000 : Response 오류
@@ -67,8 +69,11 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
 
-    //[PATCH] /users/{userIdx}
+    //[PATCH] /users/{userId}
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
+
+    //[PATCH] /events/{eventId}
+    MODIFY_FAIL_EVENTINFO(false, 4015, "이벤트 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
