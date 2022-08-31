@@ -40,6 +40,10 @@ public enum BaseResponseStatus {
     POST_LOGIN_INVALID_EMAIL(false, 2024, "아이디는 이메일주소 형식으로 입력해주세요."),
     POST_LOGIN_EMPTY_PASSWORD(false, 2025, "비밀번호를 입력해주세요."),
 
+    // [POST] /events
+    POST_EVENT_EMPTY_TITLE(false, 2026, "이벤트 제목을 입력하세요."),
+    POST_EVENT_INVALID_EXPIREDAT(false, 2027, "만료일이 현재 시간보다 빠릅니다."),
+
 
     /**
      * 3000 : Response 오류
