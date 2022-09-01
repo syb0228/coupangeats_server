@@ -49,6 +49,9 @@ public enum BaseResponseStatus {
     // [POST] /events/{eventId}
     POST_EVENT_EMPTY_EVENTINFO(false, 2030, "이벤트 제목이나 내용을 입력하세요."),
 
+    // [POST] /user-addresses/{userId}
+    POST_USERADDRESS_EMPTY_NAME(false, 2031, "주소 명칭을 입력하세요."),
+
     /**
      * 3000 : Response 오류
      */
@@ -78,8 +81,13 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_EVENTINFO(false, 4015, "이벤트 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
+    //[PATCH] /user-addresses/{userAddressId}
+    MODIFY_FAIL_ADDRESS_DETAIL(false, 4016, "상세 주소 변경에 실패하였습니다."),
+    MODIFY_FAIL_DIRECTIONS(false, 4017, "길 안내 변경에 실패하였습니다."),
+    MODIFY_FAIL_ADDRESS_CATEGORY(false, 4018, "주소 카테고리 변경에 실패하였습니다."),
+    MODIFY_FAIL_ADDRESS_ALIAS(false, 4019, "주소 별칭 변경에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

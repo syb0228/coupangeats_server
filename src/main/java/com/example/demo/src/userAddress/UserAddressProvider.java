@@ -35,13 +35,20 @@ public class UserAddressProvider {
     }
 
     public GetUserAddressDetailRes getUserAddress(int userAddressId) throws BaseException {
-        try{
+        try {
             GetUserAddressDetailRes getUserAddressDetailRes = userAddressDao.getUserAddress(userAddressId);
             return getUserAddressDetailRes;
-        } catch (Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+    public int checkAddressCategory(int userAddressId) throws BaseException {
+        try{
+            return userAddressDao.checkAddressCategory(userAddressId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 }

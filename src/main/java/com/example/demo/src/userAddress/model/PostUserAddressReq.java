@@ -6,11 +6,10 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
-public class UserAddress {
-    private int userAddressId;
+public class PostUserAddressReq {
     private String cityName;
     private String districtName;
     private String roadName;
