@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bdd1d454-e4a8-40c7-a0ab-1b81b0de0e45" name="rc-web-server" url="https://test.cindy-server.shop/">
+        <fileTransfer rootFolder="/var/www/rc-web-server" accessType="SFTP" host="3.39.131.20" port="22" sshConfigId="344f58eb-1198-4958-8a4b-41cb5f1694b8" sshConfig="ubuntu@3.39.131.20:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
