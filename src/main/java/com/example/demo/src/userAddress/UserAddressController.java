@@ -3,6 +3,7 @@ package com.example.demo.src.userAddress;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.userAddress.model.*;
+import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.POST_USERADDRESS_EMPTY_NAME;
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_EMPTY_NAME;
 
 
 @RestController
@@ -23,22 +23,26 @@ public class UserAddressController {
     private final UserAddressProvider userAddressProvider;
     @Autowired
     private final UserAddressService userAddressService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public UserAddressController(UserAddressProvider userAddressProvider, UserAddressService userAddressService){
+    public UserAddressController(UserAddressProvider userAddressProvider, UserAddressService userAddressService, JwtService jwtService){
         this.userAddressProvider = userAddressProvider;
         this.userAddressService = userAddressService;
+        this.jwtService = jwtService;
     }
 
     /**
      * 특정 유저 전체 주소 조회 API
-     * [GET] /user-addresses/:userId
+     * [GET] /user-addresses
      * @return BaseResponse<List<GetUserAddressRes>>
      */
     @ResponseBody
-    @GetMapping("/user-addresses/{userId}")
-    public BaseResponse<List<GetUserAddressRes>> getUserAddresses(@PathVariable("userId") int userId){
+    @GetMapping("/user-addresses")
+    public BaseResponse<List<GetUserAddressRes>> getUserAddresses(){
         try{
-            List<GetUserAddressRes> getUserAddressRes = userAddressProvider.getUserAddresses(userId);
+            int userIdByJwt = jwtService.getUserId();
+            List<GetUserAddressRes> getUserAddressRes = userAddressProvider.getUserAddresses(userIdByJwt);
             return new BaseResponse<>(getUserAddressRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
@@ -54,6 +58,8 @@ public class UserAddressController {
     @GetMapping("/user-address-details/{userAddressId}")
     public BaseResponse<GetUserAddressDetailRes> getUserAddress(@PathVariable("userAddressId") int userAddressId){
         try{
+            jwtService.getUserId();
+
             GetUserAddressDetailRes getUserAddressDetailRes = userAddressProvider.getUserAddress(userAddressId);
             return new BaseResponse<>(getUserAddressDetailRes);
         } catch (BaseException exception){
@@ -63,19 +69,20 @@ public class UserAddressController {
 
     /**
      * 유저 주소 생성 API(새 주소 추가)
-     * [POST] /user-addresses/:userId
+     * [POST] /user-addresses
      * @return BaseResponse<PostUserAddressRes>
      */
     @ResponseBody
-    @PostMapping("/user-addresses/{userId}")
-    public BaseResponse<PostUserAddressRes> createUserAddress(@PathVariable("userId") int userId, @RequestBody PostUserAddressReq postUserAddressReq){
+    @PostMapping("/user-addresses")
+    public BaseResponse<PostUserAddressRes> createUserAddress(@RequestBody PostUserAddressReq postUserAddressReq){
         // 주소 명칭 유효성 검사
         if(postUserAddressReq.getAddressName() == null) {
             return new BaseResponse<>(POST_USERADDRESS_EMPTY_NAME);
         }
 
         try{
-            PostUserAddressRes postUserAddressRes = userAddressService.createUserAddress(userId, postUserAddressReq);
+            int userIdByJwt = jwtService.getUserId();
+            PostUserAddressRes postUserAddressRes = userAddressService.createUserAddress(userIdByJwt, postUserAddressReq);
             return new BaseResponse<>(postUserAddressRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
@@ -91,6 +98,8 @@ public class UserAddressController {
     @PatchMapping("/user-addresses/{userAddressId}")
     public BaseResponse<String> modifyUserAddress(@PathVariable("userAddressId") int userAddressId, @RequestBody UserAddress userAddress){
         try{
+            jwtService.getUserId();
+
             PatchUserAddressReq patchUserAddressReq = new PatchUserAddressReq(userAddressId, userAddress.getAddressDetail(), userAddress.getDirections()
                     , userAddress.getAddressCategory(), userAddress.getAddressAlias());
             // 상세 주소 변경
