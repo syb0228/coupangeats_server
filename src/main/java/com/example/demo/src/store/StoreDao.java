@@ -1,8 +1,6 @@
 package com.example.demo.src.store;
 
-import com.example.demo.src.store.model.GetStoreInfoRes;
-import com.example.demo.src.store.model.GetStoreListRes;
-import com.example.demo.src.store.model.GetStoreRes;
+import com.example.demo.src.store.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,81 +18,33 @@ public class StoreDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-
-    public GetStoreRes getStore(int userId, int storeId){
-        String getStoreQuery = "select SI1.storeImgId, SI1.storeImgUrl\n" +
-                "    , (select case\n" +
-                "                when storeLikeId is not null then 1\n" +
-                "                else 0 end\n" +
-                "       from User\n" +
-                "       inner join StoreLike SL on User.userId = SL.userId\n" +
-                "       where User.userId = ? and Store.storeId = SL.storeId\n" +
-                "    ) as likeOrNot\n" +
-                "    , storeName\n" +
-                "    , case\n" +
-                "        when isCheetahDelivery = 'Y' then '치타배달'\n" +
-                "        else 0\n" +
-                "        end as isCheetahDelivery\n" +
-                "    ,(select CONCAT(\n" +
-                "        CAST(AVG(score) AS CHAR(3))\n" +
-                "        , '(', CAST(COUNT(reviewId) AS CHAR(20)), ')')\n" +
-                "       from Review\n" +
-                "       where Store.storeId = Review.storeId\n" +
-                "       ) as reviewScoreAndCount\n" +
-                "    , (select CONCAT('최대 ', MAX(discountPrice), '원 쿠폰 받기')\n" +
-                "        from Coupon\n" +
-                "        inner join StoreCoupon SC on Coupon.couponId = SC.couponId\n" +
-                "        where Store.storeId = SC.storeId\n" +
-                "       ) as storeCouponPrice\n" +
-                "    , deliveryFee, minOrderPrice\n" +
-                "from Store\n" +
-                "inner join (\n" +
-                "    select storeImgId, storeId, storeImgUrl\n" +
-                "    from StoreImg\n" +
-                "    where StoreImg.storeId = ? and IsRepImg = 'Y'\n" +
-                "    ) as SI1 on Store.storeId = SI1.storeId\n" +
-                "where Store.storeId = ? and Store.status = 'active'";
-        Object[] getStoreParams = new Object[]{userId, storeId, storeId};
-        return this.jdbcTemplate.queryForObject(getStoreQuery,
-                (rs, rowNum) -> new GetStoreRes(
+    public List<GetStoreImgRes> getStoreImgs(int storeId){
+        String getStoreImgsQuery = "select storeImgId, storeImgUrl, isRepImg\n" +
+                "from StoreImg\n" +
+                "inner join Store S on StoreImg.storeId = S.storeId\n" +
+                "where S.storeId = ? and StoreImg.status = 'active'";
+        int getStoreImgsParams = storeId;
+        return this.jdbcTemplate.query(getStoreImgsQuery,
+                (rs, rsNum) -> new GetStoreImgRes(
                         rs.getInt("storeImgId"),
                         rs.getString("storeImgUrl"),
-                        rs.getInt("likeOrNot"),
-                        rs.getString("storeName"),
-                        rs.getString("isCheetahDelivery"),
-                        rs.getString("reviewScoreAndCount"),
-                        rs.getString("storeCouponPrice"),
-                        rs.getInt("deliveryFee"),
-                        rs.getInt("minOrderPrice")),
-                getStoreParams);
+                        rs.getString("isRepImg")),
+                getStoreImgsParams);
     }
 
-    public GetStoreInfoRes getStoreInfo(int storeId){
-        String getStoreInfoQuery = "select storeLatitude, storeLongitude\n" +
-                "     , storeName, storePhoneNum, storeAddress, storeOwner, storeBusinessNum, storeBusinessName\n" +
-                "    , storeFindTip, storeBusinessHour, storeContent, storeNotice\n" +
-                "    , originInfo, nutritionFactsInfo, allergenInfo\n" +
-                "from Store\n" +
-                "where storeId = ? and status = 'active'";
-        int getStoreInfoParams = storeId;
-        return this.jdbcTemplate.queryForObject(getStoreInfoQuery,
-                (rs, rsNum) -> new GetStoreInfoRes(
-                        rs.getBigDecimal("storeLatitude"),
-                        rs.getBigDecimal("storeLongitude"),
-                        rs.getString("storeName"),
-                        rs.getString("storePhoneNum"),
-                        rs.getString("storeAddress"),
-                        rs.getString("storeOwner"),
-                        rs.getString("storeBusinessNum"),
-                        rs.getString("storeBusinessName"),
-                        rs.getString("storeFindTip"),
-                        rs.getString("storeBusinessHour"),
-                        rs.getString("storeContent"),
-                        rs.getString("storeNotice"),
-                        rs.getString("originInfo"),
-                        rs.getString("nutritionFactsInfo"),
-                        rs.getString("allergenInfo")),
-                getStoreInfoParams);
+    public List<GetStoreImgRes> getStoreReviewImgs(int storeId){
+        String getStoreImgsQuery = "select reviewImgId as storeImgId, reviewImgUrl as storeImgUrl, isRepImg\n" +
+                "from ReviewImg\n" +
+                "where reviewId in (select reviewId\n" +
+                "                   from Review\n" +
+                "                   where storeId = ?)";
+        int getStoreImgsParams = storeId;
+        return this.jdbcTemplate.query(getStoreImgsQuery,
+                (rs, rsNum) -> new GetStoreImgRes(
+                        rs.getInt("storeImgId"),
+                        rs.getString("storeImgUrl"),
+                        rs.getString("isRepImg")),
+                getStoreImgsParams);
     }
 
     public List<GetStoreListRes> getStores(){
@@ -145,7 +95,8 @@ public class StoreDao {
                         rs.getString("distance"),
                         rs.getInt("deliveryFee"),
                         rs.getString("takeOut"),
-                        rs.getString("storeCouponPriceAndCategory")));
+                        rs.getString("storeCouponPriceAndCategory"),
+                        getStoreImgs(rs.getInt("storeId"))));
     }
 
     public List<GetStoreListRes> getStoresByName(String searchName){
@@ -197,12 +148,147 @@ public class StoreDao {
                         rs.getString("distance"),
                         rs.getInt("deliveryFee"),
                         rs.getString("takeOut"),
-                        rs.getString("storeCouponPriceAndCategory")),
+                        rs.getString("storeCouponPriceAndCategory"),
+                        getStoreImgs(rs.getInt("storeId"))),
                 getStoresParams);
     }
 
-    public List<GetStoreListRes> getStoreLike(int userId){
-        String getStoreLikeQuery = "select StoreLike.storeId, storeName\n" +
+    public List<GetReviewRes> getReviews(int storeId){
+        String getReviewQuery = "select reviewId\n" +
+                "       ,(select reviewImgUrl\n" +
+                "        from ReviewImg\n" +
+                "        where Review.reviewId = ReviewImg.reviewId\n" +
+                "        and ReviewImg.status = 'active'\n" +
+                "        limit 1) as reviewImgUrl\n" +
+                "    ,content, score\n" +
+                "from Review\n" +
+                "where storeId = ?\n" +
+                "limit 3";
+        int getReviewParams = storeId;
+        return this.jdbcTemplate.query(getReviewQuery,
+                (rs, rsNum) -> new GetReviewRes(
+                        rs.getInt("reviewId"),
+                        rs.getString("reviewImgUrl"),
+                        rs.getString("content"),
+                        rs.getInt("score")),
+                getReviewParams);
+    }
+
+    public List<GetStoreMenuRes> getStoreMenus(int storeId, int storeMenuCategoryId){
+        String getStoreMenuQuery = "select storeMenuId, storeMenuName, storeMenuPrice, storeMenuContent\n" +
+                "    , (select storeMenuImgUrl\n" +
+                "       from StoreMenuImg\n" +
+                "       where StoreMenu.storeMenuId = StoreMenuImg.storeMenuId\n" +
+                "       and StoreMenu.status = 'active' and isRepImg = 'Y') as storeMenuImgUrl\n" +
+                "from StoreMenu\n" +
+                "where storeMenuCategoryId in (select storeMenuCategoryId\n" +
+                "from StoreMenuCategory\n" +
+                "where storeId = ? and StoreMenu.storeMenuCategoryId = ?)";
+        int getStoreMenuParams1 = storeId;
+        int getStoreMenuParams2 = storeMenuCategoryId;
+        return this.jdbcTemplate.query(getStoreMenuQuery,
+                (rs, rsNum) -> new GetStoreMenuRes(
+                        rs.getInt("storeMenuId"),
+                        rs.getString("storeMenuName"),
+                        rs.getInt("storeMenuPrice"),
+                        rs.getString("storeMenuContent"),
+                        rs.getString("storeMenuImgUrl")),
+                getStoreMenuParams1, getStoreMenuParams2);
+    }
+
+    public GetStoreRes getStore(int userId, int storeId, int storeMenuCategoryId){
+        String getStoreQuery = "select case\n" +
+                "    when (select case\n" +
+                "                when storeLikeId is not null then 1\n" +
+                "                else 0 end\n" +
+                "       from User\n" +
+                "       inner join StoreLike SL on User.userId = SL.userId\n" +
+                "       where User.userId = ? and Store.storeId = SL.storeId\n" +
+                "    ) is not null then 1\n" +
+                "    else 0 end as likeOrNot\n" +
+                "    , storeName\n" +
+                "    , case\n" +
+                "        when isCheetahDelivery = 'Y' then '치타배달'\n" +
+                "        else 0\n" +
+                "        end as isCheetahDelivery\n" +
+                "    ,(select CONCAT(\n" +
+                "        CAST(AVG(score) AS CHAR(3))\n" +
+                "        , '(', CAST(COUNT(reviewId) AS CHAR(20)), ')')\n" +
+                "       from Review\n" +
+                "       where Store.storeId = Review.storeId\n" +
+                "       ) as reviewScoreAndCount\n" +
+                "    , (select CONCAT('최대 ', MAX(discountPrice), '원 쿠폰 받기')\n" +
+                "        from Coupon\n" +
+                "        inner join StoreCoupon SC on Coupon.couponId = SC.couponId\n" +
+                "        where Store.storeId = SC.storeId\n" +
+                "       ) as storeCouponPrice\n" +
+                "    , deliveryFee, minOrderPrice, storeMenuCategoryName\n" +
+                "from Store\n" +
+                "inner join (\n" +
+                "    select storeImgId, storeId, storeImgUrl\n" +
+                "    from StoreImg\n" +
+                "    where isRepImg = 'Y'\n" +
+                "    ) as SI1 on Store.storeId = SI1.storeId\n" +
+                "inner join (\n" +
+                "    select storeMenuCategoryId, storeId, storeMenuCategoryName\n" +
+                "    from StoreMenuCategory\n" +
+                "    where storeMenuCategoryId = ?\n" +
+                ") as SMC on Store.storeId = SMC.storeId\n" +
+                "where Store.storeId = ? and Store.status = 'active'";
+        int getStoreParams1 = userId;
+        int getStoreParams2 = storeMenuCategoryId;
+        int getStoreParams3 = storeId;
+        return this.jdbcTemplate.queryForObject(getStoreQuery,
+                (rs, rsNum) -> new GetStoreRes(
+                        getStoreImgs(storeId),
+                        rs.getInt("likeOrNot"),
+                        rs.getString("storeName"),
+                        rs.getString("isCheetahDelivery"),
+                        rs.getString("reviewScoreAndCount"),
+                        rs.getString("storeCouponPrice"),
+                        rs.getInt("deliveryFee"),
+                        rs.getInt("minOrderPrice"),
+                        rs.getString("storeMenuCategoryName"),
+                        getReviews(storeId),
+                        getStoreMenus(storeId, storeMenuCategoryId)),
+                getStoreParams1, getStoreParams2, getStoreParams3);
+    }
+
+    public GetStoreInfoRes getStoreInfo(int storeId){
+        String getStoreInfoQuery = "select storeLatitude, storeLongitude\n" +
+                "     , storeName, storePhoneNum, storeAddress, storeOwner, storeBusinessNum, storeBusinessName\n" +
+                "    , storeFindTip, storeBusinessHour, storeContent, storeNotice\n" +
+                "    , originInfo, nutritionFactsInfo, allergenInfo\n" +
+                "from Store\n" +
+                "where storeId = ? and status = 'active'";
+        int getStoreInfoParams = storeId;
+        return this.jdbcTemplate.queryForObject(getStoreInfoQuery,
+                (rs, rsNum) -> new GetStoreInfoRes(
+                        rs.getBigDecimal("storeLatitude"),
+                        rs.getBigDecimal("storeLongitude"),
+                        rs.getString("storeName"),
+                        rs.getString("storePhoneNum"),
+                        rs.getString("storeAddress"),
+                        rs.getString("storeOwner"),
+                        rs.getString("storeBusinessNum"),
+                        rs.getString("storeBusinessName"),
+                        rs.getString("storeFindTip"),
+                        rs.getString("storeBusinessHour"),
+                        rs.getString("storeContent"),
+                        rs.getString("storeNotice"),
+                        rs.getString("originInfo"),
+                        rs.getString("nutritionFactsInfo"),
+                        rs.getString("allergenInfo")),
+                getStoreInfoParams);
+    }
+
+    public List<GetStoreLikeRes> getStoreLike(int userId){
+        String getStoreLikeQuery = "select StoreLike.storeId\n" +
+                "    ,(select storeImgUrl\n" +
+                "      from StoreImg\n" +
+                "      where StoreLike.storeId = StoreImg.storeId and IsRepImg = 'Y'\n" +
+                "    ) as storeImgUrl\n" +
+                "    , storeName\n" +
                 "    , case\n" +
                 "        when isCheetahDelivery = 'Y' then '치타배달'\n" +
                 "        else 0\n" +
@@ -240,8 +326,9 @@ public class StoreDao {
                 "order by StoreLike.createdAt DESC";
         int getStoreLikeParams = userId;
         return jdbcTemplate.query(getStoreLikeQuery,
-                (rs, rsNum) -> new GetStoreListRes(
+                (rs, rsNum) -> new GetStoreLikeRes(
                         rs.getInt("storeId"),
+                        rs.getString("storeImgUrl"),
                         rs.getString("storeName"),
                         rs.getString("isCheetahDelivery"),
                         rs.getString("reviewScoreAndCount"),

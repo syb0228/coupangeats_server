@@ -1,9 +1,7 @@
 package com.example.demo.src.store;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.store.model.GetStoreInfoRes;
-import com.example.demo.src.store.model.GetStoreListRes;
-import com.example.demo.src.store.model.GetStoreRes;
+import com.example.demo.src.store.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +23,19 @@ public class StoreProvider {
         this.storeDao = storeDao;
     }
 
-    public GetStoreRes getStore(int userId, int storeId) throws BaseException {
+    public List<GetStoreImgRes> getStoreImgs(int storeId) throws BaseException {
         try{
-            GetStoreRes getStoreRes = storeDao.getStore(userId, storeId);
-            return getStoreRes;
-        } catch (Exception exception){
+            List<GetStoreImgRes> getStoreImgRes = storeDao.getStoreImgs(storeId);
+            return getStoreImgRes;
+        } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public GetStoreInfoRes getStoreInfo(int storeId) throws BaseException {
+    public List<GetStoreImgRes> getStoreReviewImgs(int storeId) throws BaseException {
         try{
-            GetStoreInfoRes getStoreInfoRes = storeDao.getStoreInfo(storeId);
-            return getStoreInfoRes;
+            List<GetStoreImgRes> getStoreImgRes = storeDao.getStoreReviewImgs(storeId);
+            return getStoreImgRes;
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -61,9 +59,27 @@ public class StoreProvider {
         }
     }
 
-    public List<GetStoreListRes> getStoreLike(int userId) throws BaseException {
+    public GetStoreRes getStore(int userId, int storeId, int storeMenuCategoryId) throws BaseException {
+        try{
+            GetStoreRes getStoreRes = storeDao.getStore(userId, storeId, storeMenuCategoryId);
+            return getStoreRes;
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetStoreInfoRes getStoreInfo(int storeId) throws BaseException {
+        try{
+            GetStoreInfoRes getStoreInfoRes = storeDao.getStoreInfo(storeId);
+            return getStoreInfoRes;
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetStoreLikeRes> getStoreLike(int userId) throws BaseException {
         try {
-            List<GetStoreListRes> getStoreListRes = storeDao.getStoreLike(userId);
+            List<GetStoreLikeRes> getStoreListRes = storeDao.getStoreLike(userId);
             return getStoreListRes;
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

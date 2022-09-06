@@ -2,9 +2,8 @@ package com.example.demo.src.store;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.store.model.GetStoreInfoRes;
-import com.example.demo.src.store.model.GetStoreListRes;
-import com.example.demo.src.store.model.GetStoreRes;
+import com.example.demo.src.store.model.*;
+import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,42 +17,13 @@ public class StoreController {
     public final StoreProvider storeProvider;
     @Autowired
     public final StoreService storeService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public StoreController(StoreProvider storeProvider, StoreService storeService){
+    public StoreController(StoreProvider storeProvider, StoreService storeService, JwtService jwtService){
         this.storeProvider = storeProvider;
         this.storeService = storeService;
-    }
-
-    /**
-     * 특정 매장 조회 API
-     * [GET] /stores/:userId/:storeId
-     * @return BaseResponse<GetStoreRes>
-     */
-    @ResponseBody
-    @GetMapping("/stores/{userId}/{storeId}")
-    public BaseResponse<GetStoreRes> getStore(@PathVariable("userId") int userId, @PathVariable("storeId") int storeId){
-        try{
-            GetStoreRes getStoreRes = storeProvider.getStore(userId, storeId);
-            return new BaseResponse<>(getStoreRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
-
-    /**
-     * 특정 매장 정보 조회 API
-     * [GET] /stores/:storeId
-     * @return BaseResponse<GetStoreInfoRes>
-     */
-    @ResponseBody
-    @GetMapping("/stores/{storeId}")
-    public BaseResponse<GetStoreInfoRes> getStoreInfo(@PathVariable("storeId") int storeId){
-        try{
-            GetStoreInfoRes getStoreInfoRes = storeProvider.getStoreInfo(storeId);
-            return new BaseResponse<>(getStoreInfoRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
+        this.jwtService = jwtService;
     }
 
     /**
@@ -78,17 +48,83 @@ public class StoreController {
         }
     }
 
+
+    /**
+     * 특정 매장 조회(메인 화면) API
+     * [GET] /stores/:userId/:storeId/:storeMenuCategoryId
+     * @return BaseResponse<GetStoreRes>
+     */
+    @ResponseBody
+    @GetMapping("/stores/{userId}/{storeId}/{storeMenuCategoryId}")
+    public BaseResponse<GetStoreRes> getStore(@PathVariable("userId") int userId, @PathVariable("storeId") int storeId, @PathVariable("storeMenuCategoryId") int storeMenuCategoryId){
+        try{
+            GetStoreRes getStoreRes = storeProvider.getStore(userId, storeId, storeMenuCategoryId);
+            return new BaseResponse<>(getStoreRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 특정 매장 정보 조회 API
+     * [GET] /stores/:storeId
+     * @return BaseResponse<GetStoreInfoRes>
+     */
+    @ResponseBody
+    @GetMapping("/store-infos/{storeId}")
+    public BaseResponse<GetStoreInfoRes> getStoreInfo(@PathVariable("storeId") int storeId){
+        try{
+            GetStoreInfoRes getStoreInfoRes = storeProvider.getStoreInfo(storeId);
+            return new BaseResponse<>(getStoreInfoRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
     /**
      * 특정 유저가 즐겨찾기한 매장 조회 API
-     * [GET] /stores/:userId
+     * [GET] /stores
      * @return BaseResponse<List<GetStoreListRes>>
      */
     @ResponseBody
-    @GetMapping("/app/stores/{userId}")
-    public BaseResponse<List<GetStoreListRes>> getStoreLike(@PathVariable("userId") int userId){
+    @GetMapping("/app/store-likes")
+    public BaseResponse<List<GetStoreLikeRes>> getStoreLike(){
         try{
-            List<GetStoreListRes> getStoreListRes = storeProvider.getStoreLike(userId);
+            int userIdByJwt = jwtService.getUserId();
+            List<GetStoreLikeRes> getStoreListRes = storeProvider.getStoreLike(userIdByJwt);
             return new BaseResponse<>(getStoreListRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 매장 사장님 사진 조회 API
+     * [GET] /storeImgs/:storeId
+     * @return BaseResponse<List<GetStoreImgRes>>
+     */
+    @ResponseBody
+    @GetMapping("/app/storeImgs/{storeId}")
+    public BaseResponse<List<GetStoreImgRes>> getStoreMainImgs(@PathVariable("storeId") int storeId){
+        try{
+            List<GetStoreImgRes> getStoreImgRes = storeProvider.getStoreImgs(storeId);
+            return new BaseResponse<>(getStoreImgRes);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 매장 리뷰 사진 조회 API
+     * [GET] /reviewImgs/:storeId
+     * @return BaseResponse<List<GetStoreImgRes>>
+     */
+    @ResponseBody
+    @GetMapping("/app/reviewImgs/{storeId}")
+    public BaseResponse<List<GetStoreImgRes>> getStoreReviewImgs(@PathVariable("storeId") int storeId){
+        try{
+            List<GetStoreImgRes> getStoreImgRes = storeProvider.getStoreReviewImgs(storeId);
+            return new BaseResponse<>(getStoreImgRes);
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }

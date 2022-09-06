@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetStoreListRes {
+public class GetStoreLikeRes {
     private int storeId;
+    private String storeImgUrl;
     private String storeName;
     private String isCheetahDelivery;
     private String reviewScoreAndCount;
@@ -18,5 +17,4 @@ public class GetStoreListRes {
     private int deliveryFee;
     private String takeOut;
     private String storeCouponPriceAndCategory;
-    private List<GetStoreImgRes> storeImgs;
 }
