@@ -19,39 +19,15 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<GetUserRes> getUsers(){
-        String getUsersQuery = "select * from User";
-        return this.jdbcTemplate.query(getUsersQuery,
-                (rs,rowNum) -> new GetUserRes(
-                        rs.getInt("userId"),
-                        rs.getString("userEmail"),
-                        rs.getString("userPassword"),
-                        rs.getString("userName"),
-                        rs.getString("userPhoneNum"))
-                );
-    }
-
-    public List<GetUserRes> getUsersByEmail(String userEmail){
-        String getUsersByEmailQuery = "select * from User where userEmail =?";
-        String getUsersByEmailParams = userEmail;
-        return this.jdbcTemplate.query(getUsersByEmailQuery,
-                (rs, rowNum) -> new GetUserRes(
-                        rs.getInt("userId"),
-                        rs.getString("userEmail"),
-                        rs.getString("userPassword"),
-                        rs.getString("userName"),
-                        rs.getString("userPhoneNum")),
-                getUsersByEmailParams);
-    }
-
     public GetUserRes getUser(int userId){
-        String getUserQuery = "select * from User where userId = ?";
+        String getUserQuery = "select userId, userName\n" +
+                "    , CONCAT(SUBSTRING(userPhoneNum, 1, 3), '-****-', SUBSTRING(userPhoneNum, 8, 4)) as userPhoneNum\n" +
+                "from User\n" +
+                "where userId = ?";
         int getUserParams = userId;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getInt("userId"),
-                        rs.getString("userEmail"),
-                        rs.getString("userPassword"),
                         rs.getString("userName"),
                         rs.getString("userPhoneNum")),
                 getUserParams);

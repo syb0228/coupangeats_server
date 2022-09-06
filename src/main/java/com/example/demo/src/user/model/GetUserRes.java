@@ -10,8 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetUserRes {
     private int userId;
-    private String userEmail;
-    private String userPassword;
     private String userName;
     private String userPhoneNum;
 }
