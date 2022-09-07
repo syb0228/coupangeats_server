@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetReviewImgRes {
+public class PostReviewRes {
+    private int reviewId;
     private int reviewImgId;
-    private String reviewImgUrl;
-    private String isRepImg;
 }

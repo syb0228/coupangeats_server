@@ -88,7 +88,11 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_ADDRESS_DETAIL(false, 4016, "상세 주소 변경에 실패하였습니다."),
     MODIFY_FAIL_DIRECTIONS(false, 4017, "길 안내 변경에 실패하였습니다."),
     MODIFY_FAIL_ADDRESS_CATEGORY(false, 4018, "주소 카테고리 변경에 실패하였습니다."),
-    MODIFY_FAIL_ADDRESS_ALIAS(false, 4019, "주소 별칭 변경에 실패하였습니다.");
+    MODIFY_FAIL_ADDRESS_ALIAS(false, 4019, "주소 별칭 변경에 실패하였습니다."),
+
+    //[PATCH] /reviews/{reviewId}
+    MODIFY_FAIL_REVIEW_SCORE(false, 4020, "리뷰 평점 변경에 실패하였습니다."),
+    MODIFY_FAIL_REVIEW_CONTENT(false, 4021, "리뷰 내용 변경에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

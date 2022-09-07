@@ -1,6 +1,7 @@
 package com.example.demo.src.review;
 
 import com.example.demo.src.review.model.*;
+import com.example.demo.src.userAddress.model.PatchUserAddressReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,6 +152,56 @@ public class ReviewDao {
                         getOrderMenuList(userOrderId),
                         rs.getInt("reviewHelpCount")),
                 getOrderReviewParams);
+    }
+
+    public int createReview(int userId, int storeId, int userOrderId, PostReviewReq postReviewReq){
+        String createReviewQuery = "insert into Review (userId, storeId, userOrderId, score, content) VALUES (?, ?, ?, ?, ?)";
+        Object[] createReviewParams = new Object[]{userId, storeId, userOrderId, postReviewReq.getScore(), postReviewReq.getContent()};
+        this.jdbcTemplate.update(createReviewQuery, createReviewParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    public int createReviewImg(int reviewId, PostReviewImgReq postReviewImgReq){
+        String createReviewImgQuery = "insert into ReviewImg (reviewId, reviewImgUrl, isRepImg) VALUES (?, ?, ?)";
+        Object[] createReviewParams = new Object[]{reviewId, postReviewImgReq.getReviewImgUrl(), postReviewImgReq.getIsRepImg()};
+        this.jdbcTemplate.update(createReviewImgQuery, createReviewParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    public int checkReviewScore(int reviewId){
+        String checkReviewScoreQuery = "select score\n" +
+                "from Review\n" +
+                "where reviewId = ?";
+        int checkReviewScoreParams = reviewId;
+        return this.jdbcTemplate.queryForObject(checkReviewScoreQuery,
+                int.class,
+                checkReviewScoreParams);
+    }
+
+    public String checkReviewContent(int reviewId){
+        String checkReviewContentQuery = "select content\n" +
+                "from Review\n" +
+                "where reviewId = ?";
+        int checkReviewContentParams = reviewId;
+        return this.jdbcTemplate.queryForObject(checkReviewContentQuery,
+                String.class,
+                checkReviewContentParams);
+    }
+
+    public int modifyReviewScore(PatchReviewReq patchReviewReq){
+        String modifyReviewScoreQuery = "update Review set score = ? where reviewId = ?";
+        Object[] modifyReviewScoreParams = new Object[]{patchReviewReq.getScore(), patchReviewReq.getReviewId()};
+        return this.jdbcTemplate.update(modifyReviewScoreQuery, modifyReviewScoreParams);
+    }
+
+    public int modifyReviewContent(PatchReviewReq patchReviewReq){
+        String modifyReviewContentQuery = "update Review set content = ? where reviewId = ?";
+        Object[] modifyReviewContentParams = new Object[]{patchReviewReq.getContent(), patchReviewReq.getReviewId()};
+        return this.jdbcTemplate.update(modifyReviewContentQuery, modifyReviewContentParams);
     }
 
 }

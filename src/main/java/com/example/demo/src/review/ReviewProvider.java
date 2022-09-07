@@ -37,12 +37,30 @@ public class ReviewProvider {
     }
 
     public List<GetOrderReviewRes> getOrderReview(int userOrderId) throws BaseException {
-//        try {
+        try {
             List<GetOrderReviewRes> getOrderReviewRes = reviewDao.getOrderReview(userOrderId);
             return getOrderReviewRes;
-//        } catch (Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
-//        }
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkReviewScore(int reviewId) throws BaseException {
+        try {
+            int checkReviewScore = reviewDao.checkReviewScore(reviewId);
+            return checkReviewScore;
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public String checkReviewContent(int reviewId) throws BaseException {
+        try {
+            String checkReviewContent = reviewDao.checkReviewContent(reviewId);
+            return checkReviewContent;
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }
