@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class StoreDao {
 
-    public JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource){
