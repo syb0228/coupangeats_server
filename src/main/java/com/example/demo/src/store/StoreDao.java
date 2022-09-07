@@ -174,29 +174,29 @@ public class StoreDao {
                 getReviewParams);
     }
 
-    public List<GetStoreMenuRes> getStoreMenus(int storeId, int storeMenuCategoryId){
-        String getStoreMenuQuery = "select storeMenuId, storeMenuName, storeMenuPrice, storeMenuContent\n" +
-                "    , (select storeMenuImgUrl\n" +
-                "       from StoreMenuImg\n" +
-                "       where StoreMenu.storeMenuId = StoreMenuImg.storeMenuId\n" +
-                "       and StoreMenu.status = 'active' and isRepImg = 'Y') as storeMenuImgUrl\n" +
-                "from StoreMenu\n" +
-                "where storeMenuCategoryId in (select storeMenuCategoryId\n" +
-                "from StoreMenuCategory\n" +
-                "where storeId = ? and StoreMenu.storeMenuCategoryId = ?)";
-        int getStoreMenuParams1 = storeId;
-        int getStoreMenuParams2 = storeMenuCategoryId;
-        return this.jdbcTemplate.query(getStoreMenuQuery,
-                (rs, rsNum) -> new GetStoreMenuRes(
-                        rs.getInt("storeMenuId"),
-                        rs.getString("storeMenuName"),
-                        rs.getInt("storeMenuPrice"),
-                        rs.getString("storeMenuContent"),
-                        rs.getString("storeMenuImgUrl")),
-                getStoreMenuParams1, getStoreMenuParams2);
+    public List<GetMenuRes> getMenus(int storeId, int menuCategoryId){
+        String getMenuQuery = "select menuId, menuName, menuPrice, menuContent\n" +
+                "    , (select menuImgUrl\n" +
+                "       from MenuImg\n" +
+                "       where Menu.menuId = MenuImg.menuId\n" +
+                "       and Menu.status = 'active' and isRepImg = 'Y') as menuImgUrl\n" +
+                "from Menu\n" +
+                "where menuCategoryId in (select menuCategoryId\n" +
+                "from MenuCategory\n" +
+                "where storeId = ? and Menu.menuCategoryId = ?)";
+        int getMenuParams1 = storeId;
+        int getMenuParams2 = menuCategoryId;
+        return this.jdbcTemplate.query(getMenuQuery,
+                (rs, rsNum) -> new GetMenuRes(
+                        rs.getInt("menuId"),
+                        rs.getString("menuName"),
+                        rs.getInt("menuPrice"),
+                        rs.getString("menuContent"),
+                        rs.getString("menuImgUrl")),
+                getMenuParams1, getMenuParams2);
     }
 
-    public GetStoreRes getStore(int userId, int storeId, int storeMenuCategoryId){
+    public GetStoreRes getStore(int userId, int storeId, int menuCategoryId){
         String getStoreQuery = "select case\n" +
                 "    when (select case\n" +
                 "                when storeLikeId is not null then 1\n" +
@@ -222,7 +222,7 @@ public class StoreDao {
                 "        inner join StoreCoupon SC on Coupon.couponId = SC.couponId\n" +
                 "        where Store.storeId = SC.storeId\n" +
                 "       ) as storeCouponPrice\n" +
-                "    , deliveryFee, minOrderPrice, storeMenuCategoryName\n" +
+                "    , deliveryFee, minOrderPrice, menuCategoryName\n" +
                 "from Store\n" +
                 "inner join (\n" +
                 "    select storeImgId, storeId, storeImgUrl\n" +
@@ -230,13 +230,13 @@ public class StoreDao {
                 "    where isRepImg = 'Y'\n" +
                 "    ) as SI1 on Store.storeId = SI1.storeId\n" +
                 "inner join (\n" +
-                "    select storeMenuCategoryId, storeId, storeMenuCategoryName\n" +
-                "    from StoreMenuCategory\n" +
-                "    where storeMenuCategoryId = ?\n" +
-                ") as SMC on Store.storeId = SMC.storeId\n" +
+                "    select menuCategoryId, storeId, menuCategoryName\n" +
+                "    from MenuCategory\n" +
+                "    where menuCategoryId = ?\n" +
+                ") as MC on Store.storeId = MC.storeId\n" +
                 "where Store.storeId = ? and Store.status = 'active'";
         int getStoreParams1 = userId;
-        int getStoreParams2 = storeMenuCategoryId;
+        int getStoreParams2 = menuCategoryId;
         int getStoreParams3 = storeId;
         return this.jdbcTemplate.queryForObject(getStoreQuery,
                 (rs, rsNum) -> new GetStoreRes(
@@ -248,9 +248,9 @@ public class StoreDao {
                         rs.getString("storeCouponPrice"),
                         rs.getInt("deliveryFee"),
                         rs.getInt("minOrderPrice"),
-                        rs.getString("storeMenuCategoryName"),
+                        rs.getString("menuCategoryName"),
                         getReviews(storeId),
-                        getStoreMenus(storeId, storeMenuCategoryId)),
+                        getMenus(storeId, menuCategoryId)),
                 getStoreParams1, getStoreParams2, getStoreParams3);
     }
 

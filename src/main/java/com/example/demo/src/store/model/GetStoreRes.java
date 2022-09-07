@@ -18,7 +18,7 @@ public class GetStoreRes {
     private String storeCouponPrice;
     private int deliveryFee;
     private int minOrderPrice;
-    private String storeMenuCategoryName;
+    private String menuCategoryName;
     private List<GetReviewRes> reviews;
-    private List<GetStoreMenuRes> storeMenus;
+    private List<GetMenuRes> menus;
 }

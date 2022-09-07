@@ -20,13 +20,10 @@ public class StoreController {
     @Autowired
     private final StoreProvider storeProvider;
     @Autowired
-    private final StoreService storeService;
-    @Autowired
     private final JwtService jwtService;
 
-    public StoreController(StoreProvider storeProvider, StoreService storeService, JwtService jwtService){
+    public StoreController(StoreProvider storeProvider, JwtService jwtService){
         this.storeProvider = storeProvider;
-        this.storeService = storeService;
         this.jwtService = jwtService;
     }
 
@@ -55,14 +52,14 @@ public class StoreController {
 
     /**
      * 특정 매장 조회(메인 화면) API
-     * [GET] /stores/:userId/:storeId/:storeMenuCategoryId
+     * [GET] /stores/:userId/:storeId/:menuCategoryId
      * @return BaseResponse<GetStoreRes>
      */
     @ResponseBody
-    @GetMapping("/stores/{userId}/{storeId}/{storeMenuCategoryId}")
-    public BaseResponse<GetStoreRes> getStore(@PathVariable("userId") int userId, @PathVariable("storeId") int storeId, @PathVariable("storeMenuCategoryId") int storeMenuCategoryId){
+    @GetMapping("/stores/{userId}/{storeId}/{menuCategoryId}")
+    public BaseResponse<GetStoreRes> getStore(@PathVariable("userId") int userId, @PathVariable("storeId") int storeId, @PathVariable("menuCategoryId") int menuCategoryId){
         try{
-            GetStoreRes getStoreRes = storeProvider.getStore(userId, storeId, storeMenuCategoryId);
+            GetStoreRes getStoreRes = storeProvider.getStore(userId, storeId, menuCategoryId);
             return new BaseResponse<>(getStoreRes);
         } catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());

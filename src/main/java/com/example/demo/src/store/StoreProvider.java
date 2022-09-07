@@ -59,9 +59,9 @@ public class StoreProvider {
         }
     }
 
-    public GetStoreRes getStore(int userId, int storeId, int storeMenuCategoryId) throws BaseException {
+    public GetStoreRes getStore(int userId, int storeId, int menuCategoryId) throws BaseException {
         try{
-            GetStoreRes getStoreRes = storeDao.getStore(userId, storeId, storeMenuCategoryId);
+            GetStoreRes getStoreRes = storeDao.getStore(userId, storeId, menuCategoryId);
             return getStoreRes;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
