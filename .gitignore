@@ -2,3 +2,4 @@
 /.gradle/
 secret/
 application.yml
+resources/
