@@ -1,63 +1,59 @@
-com/example/demo/src/userAddress/UserAddressController.java
- com.example.demo.src.userAddress.UserAddressController
-com/example/demo/config/Constant.java
- com.example.demo.config.Constant
-com/example/demo/src/search/model/GetSearchRes.java
- com.example.demo.src.search.model.GetSearchRes
+com/example/demo/src/menu/MenuProvider.java
+ com.example.demo.src.menu.MenuProvider
+com/example/demo/src/review/model/PostReviewReq.java
+ com.example.demo.src.review.model.PostReviewReq
+com/example/demo/src/review/ReviewDao.java
+ com.example.demo.src.review.ReviewDao
 com/example/demo/src/event/EventController.java
  com.example.demo.src.event.EventController
-com/example/demo/src/menuCategory/MenuCategoryProvider.java
- com.example.demo.src.menuCategory.MenuCategoryProvider
-com/example/demo/utils/ValidationRegex.java
- com.example.demo.utils.ValidationRegex
+com/example/demo/src/mainMenuCategory/model/PostMainMenuCategoryRes.java
+ com.example.demo.src.mainMenuCategory.model.PostMainMenuCategoryRes
+com/example/demo/src/store/model/GetStoreLikeRes.java
+ com.example.demo.src.store.model.GetStoreLikeRes
 com/example/demo/src/event/model/GetEventsRes.java
  com.example.demo.src.event.model.GetEventsRes
-com/example/demo/src/event/model/Event.java
- com.example.demo.src.event.model.Event
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
+com/example/demo/src/review/model/GetReviewImgRes.java
+ com.example.demo.src.review.model.GetReviewImgRes
+com/example/demo/src/store/model/GetStoreRes.java
+ com.example.demo.src.store.model.GetStoreRes
+com/example/demo/src/review/model/PatchReviewReq.java
+ com.example.demo.src.review.model.PatchReviewReq
 com/example/demo/src/event/model/PostEventRes.java
  com.example.demo.src.event.model.PostEventRes
-com/example/demo/src/menuCategory/model/PostMenuCategoryRes.java
- com.example.demo.src.menuCategory.model.PostMenuCategoryRes
 com/example/demo/src/userAddress/model/PostUserAddressRes.java
  com.example.demo.src.userAddress.model.PostUserAddressRes
-com/example/demo/src/menuCategory/MenuCategoryController.java
- com.example.demo.src.menuCategory.MenuCategoryController
+com/example/demo/src/menu/model/GetMenuImgRes.java
+ com.example.demo.src.menu.model.GetMenuImgRes
 com/example/demo/src/userAddress/UserAddressService.java
  com.example.demo.src.userAddress.UserAddressService
-com/example/demo/config/secret/Secret.java
- com.example.demo.config.secret.Secret
+com/example/demo/src/review/model/GetOrderReviewRes.java
+ com.example.demo.src.review.model.GetOrderReviewRes
 com/example/demo/src/event/model/PostEventReq.java
  com.example.demo.src.event.model.PostEventReq
+com/example/demo/src/store/StoreController.java
+ com.example.demo.src.store.StoreController
 com/example/demo/src/user/model/PostUserRes.java
  com.example.demo.src.user.model.PostUserRes
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
-com/example/demo/src/menuCategory/model/GetMenuCategoryRes.java
- com.example.demo.src.menuCategory.model.GetMenuCategoryRes
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
-com/example/demo/src/menuCategory/MenuCategoryDao.java
- com.example.demo.src.menuCategory.MenuCategoryDao
-com/example/demo/src/menuCategory/model/PostMenuCategoryReq.java
- com.example.demo.src.menuCategory.model.PostMenuCategoryReq
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
-com/example/demo/src/userAddress/model/UserAddress.java
- com.example.demo.src.userAddress.model.UserAddress
+com/example/demo/src/review/model/PostReviewRes.java
+ com.example.demo.src.review.model.PostReviewRes
+com/example/demo/src/review/model/GetOrderMenuListRes.java
+ com.example.demo.src.review.model.GetOrderMenuListRes
+com/example/demo/src/store/StoreProvider.java
+ com.example.demo.src.store.StoreProvider
+com/example/demo/src/menu/model/GetMenuRes.java
+ com.example.demo.src.menu.model.GetMenuRes
 com/example/demo/src/coupon/model/GetCouponRes.java
  com.example.demo.src.coupon.model.GetCouponRes
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
 com/example/demo/src/search/SearchService.java
  com.example.demo.src.search.SearchService
-com/example/demo/src/user/model/PostUserReq.java
- com.example.demo.src.user.model.PostUserReq
+com/example/demo/src/review/model/GetReviewListRes.java
+ com.example.demo.src.review.model.GetReviewListRes
 com/example/demo/src/event/EventDao.java
  com.example.demo.src.event.EventDao
-com/example/demo/src/userAddress/UserAddressProvider.java
- com.example.demo.src.userAddress.UserAddressProvider
 com/example/demo/src/event/model/GetEventRes.java
  com.example.demo.src.event.model.GetEventRes
 com/example/demo/src/search/SearchProvider.java
@@ -70,53 +66,139 @@ com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
-com/example/demo/src/event/EventProvider.java
- com.example.demo.src.event.EventProvider
-com/example/demo/src/WebSecurityConfig.java
- com.example.demo.src.WebSecurityConfig
+com/example/demo/src/store/model/GetStoreImgRes.java
+ com.example.demo.src.store.model.GetStoreImgRes
 com/example/demo/src/userAddress/model/PatchUserAddressReq.java
  com.example.demo.src.userAddress.model.PatchUserAddressReq
 com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
-com/example/demo/src/event/model/PatchEventReq.java
- com.example.demo.src.event.model.PatchEventReq
-com/example/demo/src/menuCategory/model/MenuCategory.java
- com.example.demo.src.menuCategory.model.MenuCategory
-com/example/demo/src/user/model/PostLoginReq.java
- com.example.demo.src.user.model.PostLoginReq
-com/example/demo/src/userAddress/model/PostUserAddressReq.java
- com.example.demo.src.userAddress.model.PostUserAddressReq
-com/example/demo/src/search/SearchDao.java
- com.example.demo.src.search.SearchDao
+com/example/demo/src/review/model/ReviewImg.java
+ com.example.demo.src.review.model.ReviewImg
+com/example/demo/src/mainMenuCategory/model/PostMainMenuCategoryReq.java
+ com.example.demo.src.mainMenuCategory.model.PostMainMenuCategoryReq
 com/example/demo/src/userAddress/UserAddressDao.java
  com.example.demo.src.userAddress.UserAddressDao
-com/example/demo/src/coupon/CouponDao.java
- com.example.demo.src.coupon.CouponDao
+com/example/demo/src/store/model/GetReviewRes.java
+ com.example.demo.src.store.model.GetReviewRes
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
-com/example/demo/src/userAddress/model/GetUserAddressRes.java
- com.example.demo.src.userAddress.model.GetUserAddressRes
-com/example/demo/src/userAddress/model/GetUserAddressDetailRes.java
- com.example.demo.src.userAddress.model.GetUserAddressDetailRes
-com/example/demo/src/search/model/Search.java
- com.example.demo.src.search.model.Search
+com/example/demo/src/store/StoreService.java
+ com.example.demo.src.store.StoreService
 com/example/demo/src/coupon/CouponController.java
  com.example.demo.src.coupon.CouponController
+com/example/demo/src/menu/model/GetMenuDetailRes.java
+ com.example.demo.src.menu.model.GetMenuDetailRes
 com/example/demo/src/search/model/GetUserSearchRes.java
  com.example.demo.src.search.model.GetUserSearchRes
 com/example/demo/src/search/SearchController.java
  com.example.demo.src.search.SearchController
-com/example/demo/src/user/model/User.java
- com.example.demo.src.user.model.User
-com/example/demo/src/user/model/GetUserRes.java
- com.example.demo.src.user.model.GetUserRes
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
-com/example/demo/src/coupon/CouponProvider.java
- com.example.demo.src.coupon.CouponProvider
 com/example/demo/src/user/UserProvider.java
  com.example.demo.src.user.UserProvider
-com/example/demo/src/menuCategory/MenuCategoryService.java
- com.example.demo.src.menuCategory.MenuCategoryService
+com/example/demo/src/review/ReviewService.java
+ com.example.demo.src.review.ReviewService
+com/example/demo/src/userAddress/UserAddressController.java
+ com.example.demo.src.userAddress.UserAddressController
+com/example/demo/src/review/model/GetReviewRes.java
+ com.example.demo.src.review.model.GetReviewRes
+com/example/demo/src/store/StoreDao.java
+ com.example.demo.src.store.StoreDao
+com/example/demo/config/Constant.java
+ com.example.demo.config.Constant
+com/example/demo/src/search/model/GetSearchRes.java
+ com.example.demo.src.search.model.GetSearchRes
+com/example/demo/src/menu/model/GetMenuDetailOptionRes.java
+ com.example.demo.src.menu.model.GetMenuDetailOptionRes
+com/example/demo/src/store/model/GetStoreInfoRes.java
+ com.example.demo.src.store.model.GetStoreInfoRes
+com/example/demo/src/order/model/GetOrderDetailRes.java
+ com.example.demo.src.order.model.GetOrderDetailRes
+com/example/demo/src/order/OrderDao.java
+ com.example.demo.src.order.OrderDao
+com/example/demo/utils/ValidationRegex.java
+ com.example.demo.utils.ValidationRegex
+com/example/demo/src/event/model/Event.java
+ com.example.demo.src.event.model.Event
+com/example/demo/src/mainMenuCategory/MainMenuCategoryDao.java
+ com.example.demo.src.mainMenuCategory.MainMenuCategoryDao
+com/example/demo/src/review/ReviewController.java
+ com.example.demo.src.review.ReviewController
+com/example/demo/config/secret/Secret.java
+ com.example.demo.config.secret.Secret
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
+com/example/demo/src/order/model/Order.java
+ com.example.demo.src.order.model.Order
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/src/mainMenuCategory/MainMenuCategoryService.java
+ com.example.demo.src.mainMenuCategory.MainMenuCategoryService
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
+com/example/demo/src/order/OrderService.java
+ com.example.demo.src.order.OrderService
+com/example/demo/src/userAddress/model/UserAddress.java
+ com.example.demo.src.userAddress.model.UserAddress
+com/example/demo/src/menu/MenuDao.java
+ com.example.demo.src.menu.MenuDao
+com/example/demo/src/store/model/GetStoreListRes.java
+ com.example.demo.src.store.model.GetStoreListRes
+com/example/demo/src/user/model/PostUserReq.java
+ com.example.demo.src.user.model.PostUserReq
+com/example/demo/src/mainMenuCategory/model/MainMenuCategory.java
+ com.example.demo.src.mainMenuCategory.model.MainMenuCategory
+com/example/demo/src/store/model/GetMenuRes.java
+ com.example.demo.src.store.model.GetMenuRes
+com/example/demo/src/userAddress/UserAddressProvider.java
+ com.example.demo.src.userAddress.UserAddressProvider
+com/example/demo/src/mainMenuCategory/MainMenuCategoryProvider.java
+ com.example.demo.src.mainMenuCategory.MainMenuCategoryProvider
+com/example/demo/src/mainMenuCategory/MainMenuCategoryController.java
+ com.example.demo.src.mainMenuCategory.MainMenuCategoryController
+com/example/demo/src/event/EventProvider.java
+ com.example.demo.src.event.EventProvider
+com/example/demo/src/WebSecurityConfig.java
+ com.example.demo.src.WebSecurityConfig
+com/example/demo/src/order/OrderProvider.java
+ com.example.demo.src.order.OrderProvider
+com/example/demo/src/event/model/PatchEventReq.java
+ com.example.demo.src.event.model.PatchEventReq
+com/example/demo/src/user/model/PostLoginReq.java
+ com.example.demo.src.user.model.PostLoginReq
+com/example/demo/src/userAddress/model/PostUserAddressReq.java
+ com.example.demo.src.userAddress.model.PostUserAddressReq
+com/example/demo/src/review/model/Review.java
+ com.example.demo.src.review.model.Review
+com/example/demo/src/search/SearchDao.java
+ com.example.demo.src.search.SearchDao
+com/example/demo/src/order/model/GetOrderReadyRes.java
+ com.example.demo.src.order.model.GetOrderReadyRes
+com/example/demo/src/review/model/PostReviewImgReq.java
+ com.example.demo.src.review.model.PostReviewImgReq
+com/example/demo/src/coupon/CouponDao.java
+ com.example.demo.src.coupon.CouponDao
+com/example/demo/src/review/ReviewProvider.java
+ com.example.demo.src.review.ReviewProvider
+com/example/demo/src/userAddress/model/GetUserAddressRes.java
+ com.example.demo.src.userAddress.model.GetUserAddressRes
+com/example/demo/src/userAddress/model/GetUserAddressDetailRes.java
+ com.example.demo.src.userAddress.model.GetUserAddressDetailRes
+com/example/demo/src/order/OrderController.java
+ com.example.demo.src.order.OrderController
+com/example/demo/src/search/model/Search.java
+ com.example.demo.src.search.model.Search
+com/example/demo/src/user/model/User.java
+ com.example.demo.src.user.model.User
+com/example/demo/src/mainMenuCategory/model/GetMainMenuCategoryRes.java
+ com.example.demo.src.mainMenuCategory.model.GetMainMenuCategoryRes
+com/example/demo/src/user/model/GetUserRes.java
+ com.example.demo.src.user.model.GetUserRes
+com/example/demo/src/menu/MenuController.java
+ com.example.demo.src.menu.MenuController
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
+com/example/demo/src/coupon/CouponProvider.java
+ com.example.demo.src.coupon.CouponProvider
+com/example/demo/src/order/model/GetOrderHistRes.java
+ com.example.demo.src.order.model.GetOrderHistRes
