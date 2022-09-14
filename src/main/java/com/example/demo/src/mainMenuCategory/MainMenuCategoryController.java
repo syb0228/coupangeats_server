@@ -18,12 +18,8 @@ public class MainMenuCategoryController {
     @Autowired
     private final MainMenuCategoryProvider mainMenuCategoryProvider;
 
-    @Autowired
-    private final MainMenuCategoryService mainMenuCategoryService;
-
-    public MainMenuCategoryController(MainMenuCategoryProvider mainMenuCategoryProvider, MainMenuCategoryService mainMenuCategoryService){
+    public MainMenuCategoryController(MainMenuCategoryProvider mainMenuCategoryProvider){
         this.mainMenuCategoryProvider = mainMenuCategoryProvider;
-        this.mainMenuCategoryService = mainMenuCategoryService;
     }
 
     /**

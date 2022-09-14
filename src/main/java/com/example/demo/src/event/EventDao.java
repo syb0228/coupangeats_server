@@ -1,19 +1,13 @@
 package com.example.demo.src.event;
 
-import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.event.model.GetEventRes;
 import com.example.demo.src.event.model.GetEventsRes;
-import com.example.demo.src.event.model.PatchEventReq;
-import com.example.demo.src.event.model.PostEventReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
-
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 @Repository
 public class EventDao {
@@ -60,39 +54,4 @@ public class EventDao {
                         rs.getString("eventContent")),
                 getEventParams);
     }
-
-    public int createEvent(PostEventReq postEventReq){
-        String createEventQuery = "insert into Event (eventTitle, eventContent, expiredAt) VALUES (?, ?, ?)";
-        Object[] createEventParams = new Object[]{postEventReq.getEventTitle(), postEventReq.getEventContent(), postEventReq.getExpiredAt()};
-        this.jdbcTemplate.update(createEventQuery, createEventParams);
-
-        String lastInsertIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
-    }
-
-    public int createEventImg(int eventId, PostEventReq postEventReq){
-        String createEventImgQuery = "insert into EventImg (eventId, eventImgUrl, isRepImg) VALUES (?, ?, ?)";
-        Object[] createEventImgParams1 = new Object[]{eventId, postEventReq.getRepEventImgUrl(), "Y"};
-        Object[] createEventImgParams2 = new Object[]{eventId, postEventReq.getNoRepEventImgUrl(), "N"};
-        this.jdbcTemplate.update(createEventImgQuery, createEventImgParams1);
-        this.jdbcTemplate.update(createEventImgQuery, createEventImgParams2);
-
-        String lastInsertIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
-    }
-
-    public int modifyEventTitle(PatchEventReq patchEventReq){
-        String modifyEventTitleQuery = "update Event set eventTitle = ? where eventId = ?";
-        Object[] modifyEventTitleParams = new Object[]{patchEventReq.getEventTitle(), patchEventReq.getEventId()};
-
-        return this.jdbcTemplate.update(modifyEventTitleQuery, modifyEventTitleParams);
-    }
-
-    public int modifyEventContent(PatchEventReq patchEventReq){
-        String modifyEventContentQuery = "update Event set eventContent = ? where eventId = ?";
-        Object[] modifyEventContentParams = new Object[]{patchEventReq.getEventContent(), patchEventReq.getEventId()};
-
-        return this.jdbcTemplate.update(modifyEventContentQuery, modifyEventContentParams);
-    }
-
 }

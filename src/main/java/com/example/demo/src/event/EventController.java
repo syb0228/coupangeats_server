@@ -23,12 +23,8 @@ public class EventController {
     @Autowired
     private final EventProvider eventProvider;
 
-    @Autowired
-    private final EventService eventService;
-
-    public EventController(EventProvider eventProvider, EventService eventService){
+    public EventController(EventProvider eventProvider){
         this.eventProvider = eventProvider;
-        this.eventService = eventService;
     }
 
     /**
@@ -66,76 +62,6 @@ public class EventController {
             return new BaseResponse<>(getEventRes);
         } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
-        }
-    }
-
-    /**
-     * 이벤트 생성 API
-     * [POST] /events
-     * @return BaseResponse<PostEventRes>
-     */
-    // Body
-    @ResponseBody
-    @PostMapping("")
-    public BaseResponse<PostEventRes> createEvent(@RequestBody PostEventReq postEventReq){
-        // 이벤트 제목 유효성 검사
-        if(postEventReq.getEventTitle() == null){ // null 값
-            return new BaseResponse<>(POST_EVENT_EMPTY_TITLE);
-        }
-
-        if(postEventReq.getExpiredAt() != null){
-            // 이벤트 만료일 유효성 검사
-            Date date = new Date();
-            Timestamp ts = new Timestamp(date.getTime());
-            Timestamp expiredAt = postEventReq.getExpiredAt();
-            if(expiredAt.before(ts)){ // 만료일이 현재 날짜보다 빠른 경우
-                return new BaseResponse<>(POST_EVENT_INVALID_EXPIREDAT);
-            }
-        }
-
-        // 이벤트 이미지 유효성 검사
-        if(postEventReq.getRepEventImgUrl() == null){
-            return new BaseResponse<>(POST_EVENT_EMPTY_REPIMG);
-        }
-        if(postEventReq.getNoRepEventImgUrl() == null){
-            return new BaseResponse<>(POST_EVENT_EMPTY_NOREPIMG);
-        }
-
-        try{
-            PostEventRes postEventRes = eventService.createEvent(postEventReq);
-            return new BaseResponse<>(postEventRes);
-        } catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
-
-    /**
-     * 이벤트 정보 변경 API
-     * [PATCH] /events/:eventId
-     * @return BaseResponse<String>
-     */
-    @ResponseBody
-    @PatchMapping("/{eventId}")
-    public BaseResponse<String> modifyEventInfo(@PathVariable("eventId") int eventId, @RequestBody Event event){
-        try {
-            PatchEventReq patchEventReq = new PatchEventReq(eventId, event.getEventTitle(), event.getEventContent());
-            // 이벤트 정보 유효성 검사
-            if (patchEventReq.getEventTitle() == null && patchEventReq.getEventContent() == null){
-                return new BaseResponse<>(POST_EVENT_EMPTY_EVENTINFO);
-            }
-            // 이벤트 제목 변경
-            if(patchEventReq.getEventTitle() != null){
-                eventService.modifyEventTitle(patchEventReq);
-            }
-            // 이벤트 내용 변경
-            if(patchEventReq.getEventContent() != null){
-                eventService.modifyEventContent(patchEventReq);
-            }
-
-            String result = "";
-            return new BaseResponse<>(result);
-        } catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
         }
     }
 

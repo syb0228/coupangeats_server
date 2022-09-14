@@ -18,12 +18,9 @@ public class SearchController {
 
     @Autowired
     private final SearchProvider searchProvider;
-    @Autowired
-    private final SearchService searchService;
 
-    public SearchController(SearchProvider searchProvider, SearchService searchService){
+    public SearchController(SearchProvider searchProvider){
         this.searchProvider = searchProvider;
-        this.searchService = searchService;
     }
 
     /**
