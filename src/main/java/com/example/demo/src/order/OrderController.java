@@ -2,6 +2,7 @@ package com.example.demo.src.order;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.order.model.GetOrderHistRes;
 import com.example.demo.src.order.model.GetOrderReadyRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class OrderController {
     /**
      * 준비 중인 주문 조회 API
      * [GET] /orders
-     * @return
+     * @return BaseResponse<List<GetOrderReadyRes>>
      */
     @ResponseBody
     @GetMapping("/orders")
@@ -46,6 +47,23 @@ public class OrderController {
             List<GetOrderReadyRes> getOrderReadyRes = orderProvider.getOrderReady(userIdByJwt);
             return new BaseResponse<>(getOrderReadyRes);
         } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 과거 주문 내역 조회 API
+     * [GET] /orderhists
+     * BaseResponse<List<GetOrderHistRes>>
+     */
+    @ResponseBody
+    @GetMapping("/orderhists")
+    public BaseResponse<List<GetOrderHistRes>> getOrderHist(){
+        try {
+            int userIdByJwt = jwtService.getUserId();
+            List<GetOrderHistRes> getOrderHistRes = orderProvider.getOrderHist(userIdByJwt);
+            return new BaseResponse<>(getOrderHistRes);
+        } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }

@@ -14,6 +14,6 @@ public class GetOrderReadyRes {
     private String orderStoreName;
     private String orderTime;
     private String orderStatus;
-    private int orderPrice;
     private List<GetOrderDetailRes> orderDetails;
+    private int orderPrice;
 }
