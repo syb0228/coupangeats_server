@@ -55,7 +55,6 @@ public enum BaseResponseStatus {
 
     // [POST] /orders
     POST_USERORDER_INVAILD_ITEM(false, 2032, "올바르지 않은 일회용품 선택입니다."),
-    POST_USERORDER_INVAILD_MENUCOUNT(false, 2033, "올바르지 않은 수량입니다."),
 
 
     /**
