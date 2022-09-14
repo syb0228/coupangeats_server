@@ -4,16 +4,17 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.order.model.GetOrderHistRes;
 import com.example.demo.src.order.model.GetOrderReadyRes;
+import com.example.demo.src.order.model.PostOrderReq;
+import com.example.demo.src.order.model.PostOrderRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.POST_USERORDER_INVAILD_ITEM;
 
 @RestController
 @RequestMapping("/app")
@@ -54,7 +55,7 @@ public class OrderController {
     /**
      * 과거 주문 내역 조회 API
      * [GET] /orderhists
-     * BaseResponse<List<GetOrderHistRes>>
+     * @return BaseResponse<List<GetOrderHistRes>>
      */
     @ResponseBody
     @GetMapping("/orderhists")
@@ -67,5 +68,29 @@ public class OrderController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 주문 생성 API
+     * [POST] /orders
+     * @return BaseResponse<PostOrderRes>
+     */
+    @ResponseBody
+    @PostMapping("/orders")
+    public BaseResponse<PostOrderRes> createOrder(@RequestBody PostOrderReq postOrderReq){
+        try {
+            int userIdByJwt = jwtService.getUserId();
+
+            // 일회용품 여부 유효성 검사
+            if(postOrderReq.getDisposableItems() != 0 && postOrderReq.getDisposableItems() != 1){
+                return new BaseResponse<>(POST_USERORDER_INVAILD_ITEM);
+            }
+
+            PostOrderRes postOrderRes = orderService.createOrder(userIdByJwt, postOrderReq);
+            return new BaseResponse<>(postOrderRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 }

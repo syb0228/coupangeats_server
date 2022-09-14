@@ -1,9 +1,8 @@
 package com.example.demo.src.order;
 
-import com.example.demo.src.order.model.GetOrderDetailOptionRes;
-import com.example.demo.src.order.model.GetOrderDetailRes;
-import com.example.demo.src.order.model.GetOrderHistRes;
-import com.example.demo.src.order.model.GetOrderReadyRes;
+import com.example.demo.src.order.model.*;
+import com.example.demo.src.review.model.PostReviewImgReq;
+import com.example.demo.src.review.model.PostReviewReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -87,7 +86,9 @@ public class OrderDao {
                 "            REPLACE(\n" +
                 "                DATE_FORMAT(UserOrder.createdAt, '%Y-%m-%d %p %h:%i'), 'AM', '오전'\n" +
                 "                ), 'PM', '오후') as orderTime\n" +
-                "        , '배달 완료' as deliveryStatus\n" +
+                "        , case\n" +
+                "            when orderStatus = 0 then '주문 취소됨'\n" +
+                "            else '배달 완료' end as deliveryStatus\n" +
                 "        , orderPrice\n" +
                 "        , case\n" +
                 "            when reviewStatus = 'Y' then '작성한 리뷰 보기'\n" +
@@ -108,5 +109,35 @@ public class OrderDao {
                         rs.getString("reviewStatus")),
                 getOrderHistParams);
     }
+
+    public int createOrder(int userId, PostOrderReq postOrderReq){
+        String createOrderQuery = "insert into UserOrder (userId, userAddressId, storeId, userPaymentId, storeRequest, disposableItems, deliveryRequest) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        Object[] createOrderParams = new Object[]{userId, postOrderReq.getUserAddressId(), postOrderReq.getStoreId(), postOrderReq.getUserPaymentId()
+                , postOrderReq.getStoreRequest(), postOrderReq.getDisposableItems(), postOrderReq.getDeliveryRequest()};
+        this.jdbcTemplate.update(createOrderQuery, createOrderParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    public int createOrderDetail(int userOrderId, PostOrderDetailReq postOrderDetailReq){
+        String createOrderDetailQuery = "insert into OrderDetail (userOrderId, menuId, menuCount) VALUES (?, ?, ?)";
+        Object[] createOrderDetailParams = new Object[]{userOrderId, postOrderDetailReq.getMenuId(), postOrderDetailReq.getMenuCount()};
+        this.jdbcTemplate.update(createOrderDetailQuery, createOrderDetailParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+    public int createOrderDetailOption(int orderDetailId, PostOrderDetailOptionReq postOrderDetailOptionReq){
+        String createOrderDetailOptionQuery = "insert into OrderDetailOption (orderDetailId, menuDetailId, menuDetailOptionId) VALUES (?, ?, ?)";
+        Object[] createOrderDetailOptionParams = new Object[]{orderDetailId, postOrderDetailOptionReq.getMenuDetailId(), postOrderDetailOptionReq.getMenuDetailOptionId()};
+        this.jdbcTemplate.update(createOrderDetailOptionQuery, createOrderDetailOptionParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
+
 
 }

@@ -53,6 +53,11 @@ public enum BaseResponseStatus {
     // [POST] /user-addresses/{userId}
     POST_USERADDRESS_EMPTY_NAME(false, 2031, "주소 명칭을 입력하세요."),
 
+    // [POST] /orders
+    POST_USERORDER_INVAILD_ITEM(false, 2032, "올바르지 않은 일회용품 선택입니다."),
+    POST_USERORDER_INVAILD_MENUCOUNT(false, 2033, "올바르지 않은 수량입니다."),
+
+
     /**
      * 3000 : Response 오류
      */
