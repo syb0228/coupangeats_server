@@ -126,4 +126,24 @@ public class UserAddressController {
         }
     }
 
+    /**
+     * 유저 주소 정보 삭제 API
+     * [DELETE] /user-addresses/:userAddressId
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping("/user-addresses/{userAddressId}")
+    public BaseResponse<String> deleteUserAddress(@PathVariable("userAddressId") int userAddressId){
+        try {
+            jwtService.getUserId();
+
+            userAddressService.deleteUserAddress(userAddressId);
+
+            String result = "";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }

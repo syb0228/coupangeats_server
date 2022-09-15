@@ -105,7 +105,10 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_REVIEW_CONTENT(false, 4021, "리뷰 내용 변경에 실패하였습니다."),
 
     //[DELETE] /payments/{paymentId}
-    DELETE_FAIL_PAYMENT(false, 4021, "리뷰 내용 변경에 실패하였습니다.");
+    DELETE_FAIL_PAYMENT(false, 4022, "결제 정보 삭제에 실패하였습니다."),
+
+    //[DELETE] /user-addresses/{userAddressId}
+    DELETE_FAIL_ADDRESS(false, 4023, "주소 정보 삭제에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

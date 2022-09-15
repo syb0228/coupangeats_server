@@ -79,4 +79,16 @@ public class UserAddressService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void deleteUserAddress(int userAddressId) throws BaseException {
+        try {
+            int result = userAddressDao.deleteUserAddress(userAddressId);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_ADDRESS);
+            }
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

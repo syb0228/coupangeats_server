@@ -113,6 +113,11 @@ public class UserAddressDao {
         return this.jdbcTemplate.update(modifyAddressAliasQuery, modifyAddressAliasParams);
     }
 
+    public int deleteUserAddress(int userAddressId){
+        String deleteUserAddressQuery = "update UserAddress set status = 'deleted' where userAddressId = ?";
+        int deleteUserAddressParams = userAddressId;
+        return this.jdbcTemplate.update(deleteUserAddressQuery, deleteUserAddressParams);
+    }
 
 
 }
