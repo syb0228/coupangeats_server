@@ -172,6 +172,15 @@ public class ReviewDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    public int modifyReviewStatus(int userOrderId){
+        String modifyReviewStatusQuery = "update UserOrder set reviewStatus = 'Y' where userOrderId = ?";
+        int modifyReviewStatusParams = userOrderId;
+        this.jdbcTemplate.update(modifyReviewStatusQuery, modifyReviewStatusParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
     public int checkReviewScore(int reviewId){
         String checkReviewScoreQuery = "select score\n" +
                 "from Review\n" +
@@ -202,6 +211,12 @@ public class ReviewDao {
         String modifyReviewContentQuery = "update Review set content = ? where reviewId = ?";
         Object[] modifyReviewContentParams = new Object[]{patchReviewReq.getContent(), patchReviewReq.getReviewId()};
         return this.jdbcTemplate.update(modifyReviewContentQuery, modifyReviewContentParams);
+    }
+
+    public int deleteReview(int reviewId){
+        String deleteReviewQuery = "update Review set status = 'deleted' where reviewId = ?";
+        int deleteReviewParams = reviewId;
+        return this.jdbcTemplate.update(deleteReviewQuery, deleteReviewParams);
     }
 
 }

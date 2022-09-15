@@ -112,4 +112,24 @@ public class ReviewController {
         }
     }
 
+    /**
+     * 리뷰 정보 삭제 API
+     * [DELETE] /reviews/:reviewId
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @DeleteMapping("/{reviewId}")
+    public BaseResponse<String> deleteReview(@PathVariable("userOrderId") int reviewId){
+        try {
+            jwtService.getUserId();
+
+            reviewService.deleteReview(reviewId);
+
+            String result = "";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }

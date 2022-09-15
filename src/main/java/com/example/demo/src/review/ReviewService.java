@@ -38,6 +38,7 @@ public class ReviewService {
             for (int i = 0; i < postReviewReq.getReviewImgs().size(); i++){
                 reviewImgId = reviewDao.createReviewImg(reviewId, postReviewReq.getReviewImgs().get(i));
             }
+            reviewDao.modifyReviewStatus(userOrderId);
             return new PostReviewRes(reviewId, reviewImgId);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -64,6 +65,17 @@ public class ReviewService {
       } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
       }
+    }
+
+    public void deleteReview(int reviewId) throws BaseException {
+        try {
+            int result = reviewDao.deleteReview(reviewId);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_REVIEW);
+            }
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }
