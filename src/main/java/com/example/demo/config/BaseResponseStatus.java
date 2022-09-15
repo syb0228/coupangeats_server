@@ -56,6 +56,12 @@ public enum BaseResponseStatus {
     // [POST] /orders
     POST_USERORDER_INVAILD_ITEM(false, 2032, "올바르지 않은 일회용품 선택입니다."),
 
+    // [POST] /payments
+    POST_PAYMENT_EMPTY_BANK(false, 2034, "카드사/은행명을 선택하세요."),
+    POST_PAYMENT_EMPTY_NUM(false, 2035, "카드/계좌 번호를 입력하세요."),
+    POST_PAYMENT_INVAILD_METHOD(false, 2036, "올바르지 않은 결제 수단입니다."),
+    POST_PAYMENT_INVAILD_NUM(false, 2037, "올바르지 않은 카드/계좌 번호(8자리 숫자)입니다."),
+
 
     /**
      * 3000 : Response 오류
@@ -96,7 +102,10 @@ public enum BaseResponseStatus {
 
     //[PATCH] /reviews/{reviewId}
     MODIFY_FAIL_REVIEW_SCORE(false, 4020, "리뷰 평점 변경에 실패하였습니다."),
-    MODIFY_FAIL_REVIEW_CONTENT(false, 4021, "리뷰 내용 변경에 실패하였습니다.");
+    MODIFY_FAIL_REVIEW_CONTENT(false, 4021, "리뷰 내용 변경에 실패하였습니다."),
+
+    //[DELETE] /payments/{paymentId}
+    DELETE_FAIL_PAYMENT(false, 4021, "리뷰 내용 변경에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
