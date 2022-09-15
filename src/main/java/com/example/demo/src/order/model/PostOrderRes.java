@@ -10,5 +10,6 @@ import lombok.Setter;
 public class PostOrderRes {
     private int userOrderId;
     private int orderDetailId;
+    private int deliveryId;
     private int orderOptionId;
 }

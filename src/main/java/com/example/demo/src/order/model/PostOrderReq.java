@@ -13,7 +13,7 @@ public class PostOrderReq {
     private int userAddressId;
     private int storeId;
     private List<PostOrderDetailReq> orderDetails;
-    private int userPaymentId;
+    private int paymentId;
     private String storeRequest;
     private int disposableItems;
     private String deliveryRequest;

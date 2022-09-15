@@ -1,8 +1,6 @@
 package com.example.demo.src.order;
 
 import com.example.demo.src.order.model.*;
-import com.example.demo.src.review.model.PostReviewImgReq;
-import com.example.demo.src.review.model.PostReviewReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -111,8 +109,8 @@ public class OrderDao {
     }
 
     public int createOrder(int userId, PostOrderReq postOrderReq){
-        String createOrderQuery = "insert into UserOrder (userId, userAddressId, storeId, userPaymentId, storeRequest, disposableItems, deliveryRequest) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        Object[] createOrderParams = new Object[]{userId, postOrderReq.getUserAddressId(), postOrderReq.getStoreId(), postOrderReq.getUserPaymentId()
+        String createOrderQuery = "insert into UserOrder (userId, userAddressId, storeId, paymentId, storeRequest, disposableItems, deliveryRequest) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        Object[] createOrderParams = new Object[]{userId, postOrderReq.getUserAddressId(), postOrderReq.getStoreId(), postOrderReq.getPaymentId()
                 , postOrderReq.getStoreRequest(), postOrderReq.getDisposableItems(), postOrderReq.getDeliveryRequest()};
         this.jdbcTemplate.update(createOrderQuery, createOrderParams);
 
@@ -129,6 +127,15 @@ public class OrderDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    public int createDelivery(int userOrderId){
+        String createDeliveryQuery = "insert into Delivery (userOrderId) VALUES (?)";
+        int createDeliveryParams = userOrderId;
+        this.jdbcTemplate.update(createDeliveryQuery, createDeliveryParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
+    }
+
     public int createOrderDetailOption(int orderDetailId, PostOrderDetailOptionReq postOrderDetailOptionReq){
         String createOrderDetailOptionQuery = "insert into OrderDetailOption (orderDetailId, menuDetailId, menuDetailOptionId) VALUES (?, ?, ?)";
         Object[] createOrderDetailOptionParams = new Object[]{orderDetailId, postOrderDetailOptionReq.getMenuDetailId(), postOrderDetailOptionReq.getMenuDetailOptionId()};
@@ -138,6 +145,49 @@ public class OrderDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
+    public GetOrderStatusRes getOrderStatus(int userOrderId){
+        String getOrderStatusQuery = "select storeLatitude, storeLongitude, addressLatitude, addressLongitude\n" +
+                "     ,CONCAT(\n" +
+                "         ROUND((6371 * acos(cos(radians(addressLatitude))\n" +
+                "            * cos(radians(storeLatitude))\n" +
+                "            * cos(radians(storeLongitude) - radians(addressLongitude))\n" +
+                "            + sin(radians(addressLatitude)) * sin(radians(storeLatitude))\n" +
+                "            )), 1), 'km') as distance\n" +
+                "     , case\n" +
+                "       when orderStatus = 0 then '주문 취소됨'\n" +
+                "       when orderStatus = 1 then '주문 확인중'\n" +
+                "       when orderStatus = 2 then '주문 수락됨'\n" +
+                "       when orderStatus = 3 and deliveryStatus = 1 then '메뉴 준비중'\n" +
+                "       when deliveryStatus = 2 then '배달중'\n" +
+                "       when deliveryStatus = 3 then '배달 완료'\n" +
+                "     end as orderStatus\n" +
+                "    , case\n" +
+                "        when deliveryStatus = 1 then REPLACE(REPLACE(DATE_FORMAT(UserOrder.updatedAt, '%p %h:%i'), 'AM', '오전'), 'PM', '오후')\n" +
+                "        when deliveryStatus != 1 then REPLACE(REPLACE(DATE_FORMAT(D.updatedAt, '%p %h:%i'), 'AM', '오전'), 'PM', '오후')\n" +
+                "      end as orderStatusTime\n" +
+                "    , storeName, storeAddress\n" +
+                "    , orderPrice\n" +
+                "from UserOrder\n" +
+                "inner join Store S on UserOrder.storeId = S.storeId\n" +
+                "inner join UserAddress UA on UserOrder.userAddressId = UA.userAddressId\n" +
+                "inner join Delivery D on UserOrder.userOrderId = D.userOrderId\n" +
+                "where UserOrder.userOrderId = ?";
+        int getOrderStatusParams = userOrderId;
+        return this.jdbcTemplate.queryForObject(getOrderStatusQuery,
+                (rs, rsNum) -> new GetOrderStatusRes(
+                    rs.getBigDecimal("storeLatitude"),
+                    rs.getBigDecimal("storeLongitude"),
+                    rs.getBigDecimal("addressLatitude"),
+                    rs.getBigDecimal("addressLongitude"),
+                    rs.getString("distance"),
+                    rs.getString("orderStatus"),
+                    rs.getString("orderStatusTime"),
+                    rs.getString("storeName"),
+                    rs.getString("storeAddress"),
+                    rs.getInt("orderPrice"),
+                    getOrderDetails(userOrderId))
+                , getOrderStatusParams);
+    }
 
 
 }

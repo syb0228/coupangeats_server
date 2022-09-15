@@ -2,10 +2,7 @@ package com.example.demo.src.order;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.order.model.GetOrderHistRes;
-import com.example.demo.src.order.model.GetOrderReadyRes;
-import com.example.demo.src.order.model.PostOrderReq;
-import com.example.demo.src.order.model.PostOrderRes;
+import com.example.demo.src.order.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +85,24 @@ public class OrderController {
             PostOrderRes postOrderRes = orderService.createOrder(userIdByJwt, postOrderReq);
             return new BaseResponse<>(postOrderRes);
         } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 주문/배달 현황 조회 API
+     * [GET] /orders/:userOrderId
+     * @return BaseResponse<GetOrderStatusRes>
+     */
+    @ResponseBody
+    @GetMapping("/orders/{userOrderId}")
+    public BaseResponse<GetOrderStatusRes> getOrderStatus(@PathVariable("userOrderId") int userOrderId){
+        try {
+            jwtService.getUserId();
+
+            GetOrderStatusRes getOrderStatusRes = orderProvider.getOrderStatus(userOrderId);
+            return new BaseResponse<>(getOrderStatusRes);
+        } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }
