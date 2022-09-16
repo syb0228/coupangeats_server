@@ -118,19 +118,19 @@ public class OrderDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    public int createOrderDetail(int userOrderId, PostOrderDetailReq postOrderDetailReq){
-        String createOrderDetailQuery = "insert into OrderDetail (userOrderId, menuId, menuCount) VALUES (?, ?, ?)";
-        Object[] createOrderDetailParams = new Object[]{userOrderId, postOrderDetailReq.getMenuId(), postOrderDetailReq.getMenuCount()};
-        this.jdbcTemplate.update(createOrderDetailQuery, createOrderDetailParams);
+    public int createDelivery(int userOrderId){
+        String createDeliveryQuery = "insert into Delivery (userOrderId) VALUES (?)";
+        int createDeliveryParams = userOrderId;
+        this.jdbcTemplate.update(createDeliveryQuery, createDeliveryParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);
     }
 
-    public int createDelivery(int userOrderId){
-        String createDeliveryQuery = "insert into Delivery (userOrderId) VALUES (?)";
-        int createDeliveryParams = userOrderId;
-        this.jdbcTemplate.update(createDeliveryQuery, createDeliveryParams);
+    public int createOrderDetail(int userOrderId, PostOrderDetailReq postOrderDetailReq){
+        String createOrderDetailQuery = "insert into OrderDetail (userOrderId, menuId, menuCount) VALUES (?, ?, ?)";
+        Object[] createOrderDetailParams = new Object[]{userOrderId, postOrderDetailReq.getMenuId(), postOrderDetailReq.getMenuCount()};
+        this.jdbcTemplate.update(createOrderDetailQuery, createOrderDetailParams);
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class);

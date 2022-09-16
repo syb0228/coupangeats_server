@@ -119,7 +119,7 @@ public class ReviewController {
      */
     @ResponseBody
     @DeleteMapping("/{reviewId}")
-    public BaseResponse<String> deleteReview(@PathVariable("userOrderId") int reviewId){
+    public BaseResponse<String> deleteReview(@PathVariable("reviewId") int reviewId){
         try {
             jwtService.getUserId();
 

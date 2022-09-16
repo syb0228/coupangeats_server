@@ -28,22 +28,21 @@ public class OrderService {
     }
 
     public PostOrderRes createOrder(int userId, PostOrderReq postOrderReq) throws BaseException {
-//        try {
+        try {
             int userOrderId = orderDao.createOrder(userId, postOrderReq);
             int orderDetailId = 0;
-            int deliveryId = 0;
             int orderOptionId = 0;
+            int deliveryId = orderDao.createDelivery(userOrderId);
             for(int i = 0; i < postOrderReq.getOrderDetails().size(); i++){
                 orderDetailId = orderDao.createOrderDetail(userOrderId, postOrderReq.getOrderDetails().get(i));
-                deliveryId = orderDao.createDelivery(userOrderId);
                 for(int j = 0; j < postOrderReq.getOrderDetails().get(i).getOrderDetailOptions().size(); j++){
                     orderOptionId = orderDao.createOrderDetailOption(orderDetailId, postOrderReq.getOrderDetails().get(i).getOrderDetailOptions().get(j));
                 }
             }
-            return new PostOrderRes(userOrderId, orderDetailId, deliveryId, orderOptionId);
-//        } catch (Exception exception){
-//            throw new BaseException(DATABASE_ERROR);
-//        }
+            return new PostOrderRes(userOrderId, deliveryId, orderDetailId, orderOptionId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
 }

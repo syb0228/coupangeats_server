@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostOrderRes {
     private int userOrderId;
-    private int orderDetailId;
     private int deliveryId;
+    private int orderDetailId;
     private int orderOptionId;
 }
