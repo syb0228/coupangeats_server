@@ -1,4 +1,7 @@
 ## Coupang Eats API 개발
+- 소프트스퀘어드 Rising Camp 프로젝트 - 쿠팡이츠 서버 API 생성
+- 2022년 8월 28일 ~ 9월 16일 : 3주 프로젝트
+
 ### SKILLS
 - Backend
   - JDK 11 (JAVA)
